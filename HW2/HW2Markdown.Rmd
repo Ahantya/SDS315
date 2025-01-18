@@ -1,0 +1,11 @@
+---
+title: "HW2Markdown"
+author: "Ahantya Sharma"
+date: "2025-01-18"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
