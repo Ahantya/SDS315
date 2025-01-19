@@ -9,6 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(tidyverse)
+library(knitr)
 prof <- read.csv('profs.csv')
 bikeshare <- read.csv('bikeshare.csv')
 capmetro_UT <- read.csv('capmetro_UT.csv')
@@ -27,7 +28,7 @@ profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30
 
 ```
 
-The distribution of the Average Course Evaluation Scores at UT Austin shows scores that UT Students rated courses from 1 to 5. Looking at it, it's skewed to the left, and the mean of the distribution is `r round(mean(prof$eval, na.rm = TRUE), 3)`, implying that a majority of the courses are rated positively. The highest frequency of scores is around 4.0 to 4.5, which explains that professors at UT Austin are well-regarded by students when it comes to handling their classes. Along with this, there are very few courses rated below 3 on average, which suggests that UT Austin is keeping up well in course quality.
+The distribution of the Average Course Evaluation Scores at UT Austin shows scores that UT Students rated courses from 1 to 5. \newline\newline Looking at it, it's skewed to the left, and the mean of the distribution is `r round(mean(prof$eval, na.rm = TRUE), 3)`, implying that a majority of the courses are rated positively. The highest frequency of scores is around 4.0 to 4.5, which explains that professors at UT Austin are well-regarded by students when it comes to handling their classes. Along with this, there are very few courses rated below 3 on average, which suggests that UT Austin is keeping up well in course quality.
 
 ## Part B
 
@@ -44,7 +45,7 @@ groupedData <- group_by(prof, native)
 medianScores <- summarize(groupedData, medianEval = median(eval))
 
 ```
-These side to side boxplots show the distribution of average course evaluation scores split up by whether the professor of the course was a native or non-native English speaker. They show that while the lowest recorded average scores may come from courses with a professor who is a native English speaker, they also have a higher median score on average at `r medianScores[2, 2]` compared to non-native English speakers at `r medianScores[1, 2]` and contain the highest recorded average scores as well. This is most likely because students may have an easier time understanding the lectures, leading to higher evaluations overall. 
+These side to side boxplots show the distribution of average course evaluation scores split up by whether the professor of the course was a native or non-native English speaker. \newline\newline They show that while the lowest recorded average scores may come from courses with a professor who is a native English speaker, they also have a higher median score on average at `r medianScores[2, 2]` compared to non-native English speakers at `r medianScores[1, 2]` and contain the highest recorded average scores as well. This is most likely because students may have an easier time understanding the lectures, leading to higher evaluations overall. 
 
 ## Part C
 
@@ -59,7 +60,7 @@ groupedData <- group_by(prof, gender)
 meanGenderScores <- summarize(groupedData, meanEval = mean(eval))
 
 ```
-This graph shows the distribution of the average course evaluation score by gender. Both distributions are still left-skewed, showing that most professors received higher evaluation scores closer to 5 regardless of gender. The range of scores is similar for both genders, suggesting not a very big difference in the overall evaluation scores based on gender. The mean of the (average) course evaluation scores for female instructors was `r round(meanGenderScores[1, 2], 2)` while the mean for male instructors was `r round(meanGenderScores[2, 2], 2)`. The counts also reveal that there are more male professors represented in the data than female professors, as shown by the higher bars across the male histogram. 
+This graph shows the distribution of the average course evaluation score by gender. \newline\newline Both distributions are still left-skewed, showing that most professors received higher evaluation scores closer to 5 regardless of gender. The range of scores is similar for both genders, suggesting not a very big difference in the overall evaluation scores based on gender. The mean of the (average) course evaluation scores for female instructors was `r round(meanGenderScores[1, 2], 2)` while the mean for male instructors was `r round(meanGenderScores[2, 2], 2)`. The counts also reveal that there are more male professors represented in the data than female professors, as shown by the higher bars across the male histogram. 
 
 ## Part D
 
@@ -70,7 +71,7 @@ ggplot(prof) +
 corrBeauty <- round(cor(prof$beauty, prof$eval), 2)
 
 ```
-This scatterplot shows the correlation between the physical attractiveness (on a scoring scale) of a instructor vs their average course evaluation score. Looking at this scatterplot, the points are scattered without a clear linear trend. Specifically, the correlation coefficient score is `r corrBeauty`, which shows that there is a very weak, positive correlation that indicates that physical attractiveness does not predict course evaluation scores well. Course evaluation scores are instead effected much more by other factors, such as what we found in Part B of whether the professor of the course is a native or non-native English speaker. 
+This scatterplot shows the correlation between the physical attractiveness (on a scoring scale) of a instructor vs their average course evaluation score. \newline\newline Looking at this scatterplot, the points are scattered without a clear linear trend. Specifically, the correlation coefficient score is `r corrBeauty`, which shows that there is a very weak, positive correlation that indicates that physical attractiveness does not predict course evaluation scores well. Course evaluation scores are instead effected much more by other factors, such as what we found in Part B of whether the professor of the course is a native or non-native English speaker. 
 
 # Question 2 - Bike Sharing
 
@@ -88,7 +89,7 @@ ggplot(hourlyAvg) +
 
 
 ```
-This line graphs plot each hour as the x-value and the Average Bikeshare Rentals as the y-value, as a way to show the average amount of bikeshare rentals per hour. Looking at the line graph, we can see that bikeshares pick up very quick in the early morning and the evening, most likely because people are in need of transportation to get to school or work at those times. As the evening turns into late night, the average rentals per hour slow down as most people are most likely sleeping and are in no need of getting anywhere. 
+This line graphs plot each hour as the x-value and the Average Bikeshare Rentals as the y-value, as a way to show the average amount of bikeshare rentals per hour. \newline\newline Looking at the line graph, we can see that bikeshares pick up very quick in the early morning and the evening, most likely because people are in need of transportation to get to school or work at those times. As the evening turns into late night, the average rentals per hour slow down as most people are most likely sleeping and are in no need of getting anywhere. 
 
 
 ## Plot B
@@ -115,7 +116,7 @@ ggplot(hourlyAvgWorkday) +
 
 ```
 
-This line graph is similar to the one showed in Part A, however it splits the average rental bikeshare data into the working days and non-working days. The x-value still represents the Hour of the Day while the y-value still represents the amount of average bikeshare rentals. The original data had the variable "workingday" listed as 0 or 1, which had 0 represent non-working day and 1 as a working day, which I changed through my R code. As you can see, there is two bumps on the working day as those are the times when people are going to and leaving from work / school. On a non-working day, this trend doesn't exist and instead bikeshares steadily increase for the first half of the day and decrease for the second half of the day.
+This line graph is similar to the one showed in Part A, however it splits the average rental bikeshare data into the working days and non-working days. The x-value still represents the Hour of the Day while the y-value still represents the amount of average bikeshare rentals. The original data had the variable "workingday" listed as 0 or 1, which had 0 represent non-working day and 1 as a working day, which I changed through my R code. \newline\newline By the figure, there is two bumps on the working day as those are the times when people are going to and leaving from work / school. On a non-working day, this trend doesn't exist and instead bikeshares steadily increase for the first half of the day and decrease for the second half of the day.
 
 ## Plot C
 
@@ -149,7 +150,7 @@ ggplot(nineAMSummary) +
 
 ```
 
-In this bar plot, the average bike share rentals (y) are displayed for different weather situations (x) at 9 AM on workdays and non-workdays. The numbers correspond to specific weather conditions: 1 represents clear days, few clouds, or partly cloudy conditions; 2 represents mist combined with cloudy, broken clouds, or few clouds; 3 represents light snow, light rain with thunderstorms, or scattered clouds; and 4 (which has no data points at 9 AM) represents days with heavy rain, ice pallets with thunderstorms and mist, or snow and fog. As you can see, workdays have heavier bike share rentals at 9 AM in each weather situation vs non-workdays. As the weather has worse conditions, the average bike share rentals also decreases as people don't want (or have a need) to go out. 
+In this bar plot, the average bike share rentals (y) are displayed for different weather situations (x) at 9 AM on workdays and non-workdays. The numbers correspond to specific weather conditions: 1 represents clear days, few clouds, or partly cloudy conditions; 2 represents mist combined with cloudy, broken clouds, or few clouds; 3 represents light snow, light rain with thunderstorms, or scattered clouds; and 4 (which has no data points at 9 AM) represents days with heavy rain, ice pallets with thunderstorms and mist, or snow and fog.\newline\newline By the barplot, workdays have heavier bike share rentals at 9 AM in each weather situation vs non-workdays. As the weather has worse conditions, the average bike share rentals also decreases as people don't want (or have a need) to go out. 
 
 # Problem 3 - Capital Metro UT Ridership
 
@@ -179,7 +180,7 @@ ggplot(capDataSummary) +
 
 
 ```
-This graph displays the average boardings (y-axis) by the hour of the day (x-axis) for each day of the week, with each facet representing a specific day. Within each facet, three lines correspond to the average boardings for each month (September, October, and November), allowing for a comparison of trends across months. From the figure, we can tell that the hour of peak boardings is consistent across weekdays. But, in overall, there are apparent changes regarding the hour of peak boarding from day to day because the weekends have a different trend than the weekdays and seem to either barely peak average boardings a little earlier in the day (than weekdays) or seem to stay the same consistently the whole day. The lower average boarding on Mondays in September could be because of the potential holidays in early September like Labor Day and many students are just getting back from summer break so school isn't in full action. The average boundaries on Weds/Thurs/Fri in November look lower most likely because of Thanksgiving break when many students are home and aren't on campus taking buses. 
+This graph displays the average boardings (y-axis) by the hour of the day (x-axis) for each day of the week, with each facet representing a specific day. Within each facet, three lines correspond to the average boardings for each month (September, October, and November), allowing for a comparison of trends across months. \newline\newline From the figure, we can tell that the hour of peak boardings is consistent across weekdays. But, in overall, there are apparent changes regarding the hour of peak boarding from day to day because the weekends have a different trend than the weekdays and seem to either barely peak average boardings a little earlier in the day (than weekdays) or seem to stay the same consistently the whole day. The lower average boarding on Mondays in September could be because of the potential holidays in early September like Labor Day and many students are just getting back from summer break so school isn't in full action. The average boundaries on Weds/Thurs/Fri in November look lower most likely because of Thanksgiving break when many students are home and aren't on campus taking buses. 
 
 
 \newpage
@@ -202,11 +203,50 @@ ggplot(capData2Summary) +
   )
 
 ```
-This scatterplot displays the relationship between temperature and average boardings for UT students, segmented by hour of the day and weekend/weekday status. Each panel corresponds to a specific hour of the day, while the color indicates whether the data represents weekdays (red) or weekends (blue). The x-axis shows the temperature, and the y-axis represents the average boardings. When the hour of the day and weekend/weekday are held constant, the temperature seems to have very little or no effect on the number of UT students who ride the bus. This is most likely because temperature is affected by the hour of the day, so if you hold the hour of the day constant, then the temperature is probably not changing too much, which is a domino effect and also means that the amount of UT students riding the bus isn't too much. 
+This scatterplot displays the relationship between temperature and average boardings for UT students, segmented by hour of the day and weekend/weekday status. Each panel corresponds to a specific hour of the day, while the color indicates whether the data represents weekdays (red) or weekends (blue). The x-axis shows the temperature, and the y-axis represents the average boardings. \newline\newline When the hour of the day and weekend/weekday are held constant, the temperature seems to have very little or no effect on the number of UT students who ride the bus. This is most likely because temperature is affected by the hour of the day, so if you hold the hour of the day constant, then the temperature is probably not changing too much, which is a domino effect and also means that the amount of UT students riding the bus isn't too much. 
+
+\newpage
 
 # Problem 4: Wrangling the Billboard Top 100
-
 
 ## Part A
 
 ```{r echo=FALSE}
+
+mostPopularSongs <- group_by(billboard, performer, song)
+
+mostPopularSongsSummarize <- summarize(mostPopularSongs, count = n(), .groups = "keep")
+
+mostPopularSongsSorted <- arrange(mostPopularSongsSummarize, desc(count))
+
+top10Songs <- head(mostPopularSongsSorted, 10)
+
+kable(top10Songs, 
+      col.names = c("Performer", "Song", "Weeks on Chart"))
+
+```
+
+This table shows the Top 10 most popular songs since 1958 based on the total number of weeks on the Billboard Top 100. The table includes the performer, song title, and the number of weeks each song appeared on the chart.
+
+\newpage
+
+## Part B
+
+```{r echo=FALSE}
+billboardFiltered <- filter(billboard, year != 1958 & year != 2021)
+
+groupedBillboard <- group_by(billboardFiltered, year)
+
+musicalDiversity <- summarize(groupedBillboard, uniqueSongs = n_distinct(song), .groups = "drop")
+ggplot(musicalDiversity, aes(x = year, y = uniqueSongs)) +
+  geom_line(color = "blue") +
+  labs(
+    title = "Musical Diversity of the Billboard Top 100 Over Time",
+    x = "Year",
+    y = "Number of Unique Songs"
+  ) +
+  theme_minimal()
+
+
+```
+This graph shows the musical diversity of the Billboard Top 100 over time, measured as the number of unique songs that appeared on the chart each year. The x-axis represents the year, while the y-axis shows the count of unique songs. Data from the years 1958 and 2021 were excluded due to incomplete records. \newline\newline From the graph, we can see that musical diversity increased from the late 1950s to mid 1960s where it plummeted mostly steadily until around the early 2000s where it has gradually increased minus a dip in the early 2010s. The heavy increase from 2019 to 2020 may have been new songs being discovered during the COVID-19 Lockdown. 
