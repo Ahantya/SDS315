@@ -1,6 +1,6 @@
 ---
-title: "HW2Markdown"
-author: "Ahantya Sharma"
+title: "HW2 - SDS 315"
+author: "Ahantya Sharma EID: as236366"
 date: "2025-01-18"
 output: pdf_document
 ---
@@ -8,7 +8,9 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
+library(tidyverse)
 prof <- read.csv('profs.csv')
+bikeshare <- read.csv('bikeshare.csv')
 ```
 
 # Question 1 - Professor Course Evaluations
@@ -19,11 +21,133 @@ prof <- read.csv('profs.csv')
 #a
 
 profPlot <- ggplot(prof)
-profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30) + labs(title = 'Distribution of Average Course Evaluation Scores across UT Austin Courses', x = "Course Evaluation Scores", y = "Frequency of Scores") +  theme_classic()
+profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30) + labs(title = 'Distribution of Average Course Evaluation Scores across UT Austin Courses', x = "Average Course Evaluation Score", y = "Frequency of Scores") +  theme_classic()
 
 ```
 
-The distribution of the Average Course Evaluation Scores at UT Austin are skewed to the left, and the mean of the distribution is `r round(mean(prof$eval, na.rm = TRUE), 3)`, implying that a majority of the courses are rated positively. The highest frequency of scores is around 4.0 to 4.5, which explains that professors at UT Austin are well-regarded by students when it comes to handling their classes. Along with this, there are very few courses rated below 3 on average, which suggests that UT Austin is keeping up well in course quality.
+The distribution of the Average Course Evaluation Scores at UT Austin shows scores that UT Students rated courses from 1 to 5. Looking at it, it's skewed to the left, and the mean of the distribution is `r round(mean(prof$eval, na.rm = TRUE), 3)`, implying that a majority of the courses are rated positively. The highest frequency of scores is around 4.0 to 4.5, which explains that professors at UT Austin are well-regarded by students when it comes to handling their classes. Along with this, there are very few courses rated below 3 on average, which suggests that UT Austin is keeping up well in course quality.
 
 ## Part B
+
+```{r echo=FALSE}
+
+ggplot(prof, aes(x = native, y = eval, fill = native)) +
+  geom_boxplot() +
+  labs(title = "Average Course Evaluation Scores by Native English Speaker",
+       x = "Native English Speaker?",
+       y = "Average Course Evaluation Score") +
+  theme_minimal()
+
+groupedData <- group_by(prof, native)
+medianScores <- summarize(groupedData, medianEval = median(eval))
+
+```
+These side to side boxplots show the distribution of average course evaluation scores split up by whether the professor of the course was a native or non-native English speaker. They show that while the lowest recorded average scores may come from courses with a professor who is a native English speaker, they also have a higher median score on average at `r medianScores[2, 2]` compared to non-native English speakers at `r medianScores[1, 2]` and contain the highest recorded average scores as well. This is most likely because students may have an easier time understanding the lectures, leading to higher evaluations overall. 
+
+## Part C
+
+```{r echo=FALSE}
+ggplot(prof) + 
+  geom_histogram(aes(x=eval, fill=gender), bins=30) + 
+  facet_wrap(~gender, nrow=2) +
+  labs(title="Course Evaluation Scores by Gender", x="Average Course Evaluation Score", y="Frequency") +
+  theme_minimal()
+
+groupedData <- group_by(prof, gender)
+meanGenderScores <- summarize(groupedData, meanEval = mean(eval))
+
+```
+This graph shows the distribution of the average course evaluation score by gender. Both distributions are still left-skewed, showing that most professors received higher evaluation scores closer to 5 regardless of gender. The range of scores is similar for both genders, suggesting not a very big difference in the overall evaluation scores based on gender. The mean of the (average) course evaluation scores for female instructors was `r round(meanGenderScores[1, 2], 2)` while the mean for male instructors was `r round(meanGenderScores[2, 2], 2)`. The counts also reveal that there are more male professors represented in the data than female professors, as shown by the higher bars across the male histogram. 
+
+## Part D
+
+```{r echo=FALSE}
+ggplot(prof) + 
+  geom_point(aes(x=beauty, y=eval)) + labs(title="Physical Attractiveness of Professor vs. Course Evaluation Scores", x="Beauty Score", y="Average Course Evaluation Score") + theme_minimal()
+
+corrBeauty <- round(cor(prof$beauty, prof$eval), 2)
+
+```
+This scatterplot shows the correlation between the physical attractiveness (on a scoring scale) of a instructor vs their average course evaluation score. Looking at this scatterplot, the points are scattered without a clear linear trend. Specifically, the correlation coefficient score is `r corrBeauty`, which shows that there is a very weak, positive correlation that indicates that physical attractiveness does not predict course evaluation scores well. Course evaluation scores are instead effected much more by other factors, such as what we found in Part B of whether the professor of the course is a native or non-native English speaker. 
+
+# Question 2 - Bike Sharing
+
+## Plot A
+
+```{r echo=FALSE}
+
+hourlyData <- group_by(bikeshare, hr)
+
+hourlyAvg <- summarize(hourlyData, avgRentals = mean(total))
+
+
+ggplot(hourlyAvg) +  
+  geom_line(aes(x=hr, y=avgRentals)) + scale_x_continuous(breaks = seq(min(0), max(23), by = 1)) + labs(title="Average Rentals of Bikeshare per Hour", x="Hour of the Day", y="Average Bikeshare Rentals") + theme_minimal()
+
+
+```
+This line graphs plot each hour as the x-value and the Average Bikeshare Rentals as the y-value, as a way to show the average amount of bikeshare rentals per hour. Looking at the line graph, we can see that bikeshares pick up very quick in the early morning and the evening, most likely because people are in need of transportation to get to school or work at those times. As the evening turns into late night, the average rentals per hour slow down as most people are most likely sleeping and are in no need of getting anywhere. 
+
+
+## Plot B
+
+```{r echo=FALSE}
+
+hourlyDataWorkday <- group_by(bikeshare, hr, workingday)
+
+hourlyAvgWorkday <- summarize(hourlyDataWorkday, avgRentals = mean(total), .groups = "keep")
+
+ggplot(hourlyAvgWorkday) +
+  geom_line(aes(x = hr, y = avgRentals)) +
+  labs(x = "Hour of the Day", y = "Average Bikeshare Rentals", title = "Average Hourly Bike Rentals by Workday Status") +
+  scale_x_continuous(breaks = seq(0, 23, by = 2)) + 
+  facet_wrap(~ workingday, labeller = labeller(workingday = c("0" = "Non-Workday", "1" = "Workday"))) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+  )
+
+
+
+
+
+```
+
+This line graph is similar to the one showed in Part A, however it splits the average rental bikeshare data into the working days and non-working days. The x-value still represents the Hour of the Day while the y-value still represents the amount of average bikeshare rentals. The original data had the variable "workingday" listed as 0 or 1, which had 0 represent non-working day and 1 as a working day, which I changed through my R code. As you can see, there is two bumps on the working day as those are the times when people are going to and leaving from work / school. On a non-working day, this trend doesn't exist and instead bikeshares steadily increase for the first half of the day and decrease for the second half of the day.
+
+## Plot C
+
+```{r echo=FALSE}
+
+
+nineAM <- filter(bikeshare, hr == 9)
+
+nineAMWorkingDay <- group_by(nineAM, hr, workingday, weathersit)
+
+nineAMSummary <- summarize(nineAMWorkingDay, avgRentals = mean(total), .groups = "keep")
+
+
+ggplot(nineAMSummary) +
+  geom_col(aes(x = as.factor(weathersit), y = avgRentals, fill = workingday)) +
+  labs(
+    x = "Weather Situation",
+    y = "Average Bike Rentals",
+    title = "Average Bike Rentals at 9 AM by Weather and Workday Status",
+    fill = "Workday"
+  ) +
+  facet_wrap(~ workingday, labeller = labeller(workingday = c("0" = "Non-Workday", "1" = "Workday"))) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "none"
+  )
+
+
+```
+
+In this bar plot, the average bike share rentals (y) are displayed for different weather situations (x) at 9 AM on workdays and non-workdays. The numbers correspond to specific weather conditions: 1 represents clear days, few clouds, or partly cloudy conditions; 2 represents mist combined with cloudy, broken clouds, or few clouds; 3 represents light snow, light rain with thunderstorms, or scattered clouds; and 4 (which has no data points at 9 AM) represents days with heavy rain, ice pallets with thunderstorms and mist, or snow and fog. As you can see, workdays have heavier bike share rentals at 9 AM in each weather situation vs non-workdays. As the weather has worse conditions, the average bike share rentals also decreases as people don't want (or have a need) to go out. 
+
+# Problem 3 - Capital Metro UT Ridership
 
