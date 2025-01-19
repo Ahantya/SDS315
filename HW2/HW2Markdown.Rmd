@@ -7,5 +7,23 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+prof <- read.csv('profs.csv')
 ```
+
+# Question 1 - Professor Course Evaluations
+
+## Part A
+
+```{r echo=FALSE}
+#a
+
+profPlot <- ggplot(prof)
+profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30) + labs(title = 'Distribution of Average Course Evaluation Scores across UT Austin Courses', x = "Course Evaluation Scores", y = "Frequency of Scores") +  theme_classic()
+
+```
+
+The distribution of the Average Course Evaluation Scores at UT Austin are skewed to the left, and the mean of the distribution is `r round(mean(prof$eval, na.rm = TRUE), 3)`, implying that a majority of the courses are rated positively. The highest frequency of scores is around 4.0 to 4.5, which explains that professors at UT Austin are well-regarded by students when it comes to handling their classes. Along with this, there are very few courses rated below 3 on average, which suggests that UT Austin is keeping up well in course quality.
+
+## Part B
 
