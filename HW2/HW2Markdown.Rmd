@@ -11,6 +11,7 @@ library(ggplot2)
 library(tidyverse)
 prof <- read.csv('profs.csv')
 bikeshare <- read.csv('bikeshare.csv')
+capmetroUT <- read.csv('capmetro_UT.csv')
 ```
 
 # Question 1 - Professor Course Evaluations
