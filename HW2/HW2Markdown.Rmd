@@ -206,6 +206,7 @@ This scatterplot displays the relationship between temperature and average board
 
 # Problem 4: Wrangling the Billboard Top 100
 
+
 ## Part A
 
 ```{r echo=FALSE}
