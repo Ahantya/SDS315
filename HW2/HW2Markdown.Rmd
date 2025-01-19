@@ -11,7 +11,8 @@ library(ggplot2)
 library(tidyverse)
 prof <- read.csv('profs.csv')
 bikeshare <- read.csv('bikeshare.csv')
-capmetroUT <- read.csv('capmetro_UT.csv')
+capmetro_UT <- read.csv('capmetro_UT.csv')
+billboard <- read.csv("billboard.csv")
 ```
 
 # Question 1 - Professor Course Evaluations
@@ -22,7 +23,7 @@ capmetroUT <- read.csv('capmetro_UT.csv')
 #a
 
 profPlot <- ggplot(prof)
-profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30) + labs(title = 'Distribution of Average Course Evaluation Scores across UT Austin Courses', x = "Average Course Evaluation Score", y = "Frequency of Scores") +  theme_classic()
+profPlot + geom_histogram(aes(x = eval), fill = "orange", col="black", bins = 30) + labs(title = 'Distribution of Avg. Course Evaluation Scores across UT Austin Courses', x = "Average Course Evaluation Score", y = "Frequency of Scores") +  theme_classic()
 
 ```
 
@@ -152,3 +153,59 @@ In this bar plot, the average bike share rentals (y) are displayed for different
 
 # Problem 3 - Capital Metro UT Ridership
 
+## 1. 
+
+```{r echo=FALSE}
+capmetro_UT = mutate(capmetro_UT,
+              day_of_week = factor(day_of_week,
+              levels=c("Mon", "Tue", "Wed","Thu", "Fri", "Sat", "Sun")),
+              month = factor(month,
+              levels=c("Sep", "Oct","Nov")))
+
+
+capData <- group_by(capmetro_UT, hour_of_day, month, day_of_week)
+
+
+capDataSummary <- summarize(capData, avgBoardings = mean(boarding), .groups = "keep")
+
+ggplot(capDataSummary) +
+  geom_line(aes(x = hour_of_day, y = avgBoardings, color=month, group=month)) +
+  labs(x = "Hour of the Day", y = "Average Boardings", title = "Average Boardings by Hour of Day, Day of Week, and Month", Color = "Month") +
+  facet_wrap(~ day_of_week) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+  )
+
+
+```
+This graph displays the average boardings (y-axis) by the hour of the day (x-axis) for each day of the week, with each facet representing a specific day. Within each facet, three lines correspond to the average boardings for each month (September, October, and November), allowing for a comparison of trends across months. From the figure, we can tell that the hour of peak boardings is consistent across weekdays. But, in overall, there are apparent changes regarding the hour of peak boarding from day to day because the weekends have a different trend than the weekdays and seem to either barely peak average boardings a little earlier in the day (than weekdays) or seem to stay the same consistently the whole day. The lower average boarding on Mondays in September could be because of the potential holidays in early September like Labor Day and many students are just getting back from summer break so school isn't in full action. The average boundaries on Weds/Thurs/Fri in November look lower most likely because of Thanksgiving break when many students are home and aren't on campus taking buses. 
+
+
+\newpage
+
+## 2. 
+```{r echo=FALSE}
+
+capData2 <- group_by(capmetro_UT, temperature, weekend, hour_of_day)
+
+capData2Summary <- summarize(capData2, avgBoardings = mean(boarding), .groups = "keep")
+
+
+ggplot(capData2Summary) +
+  geom_point(aes(x = temperature, y = avgBoardings, color=weekend, group=weekend), size=0.6) +
+  labs(x = "Temperature", y = "Average Boardings", title = "Avg. Boardings by Temperature, Hour of the Day, and Weekend/Weekday", Color = "Weekend/Weekday") +
+  facet_wrap(~ hour_of_day) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+  )
+
+```
+This scatterplot displays the relationship between temperature and average boardings for UT students, segmented by hour of the day and weekend/weekday status. Each panel corresponds to a specific hour of the day, while the color indicates whether the data represents weekdays (red) or weekends (blue). The x-axis shows the temperature, and the y-axis represents the average boardings. When the hour of the day and weekend/weekday are held constant, the temperature seems to have very little or no effect on the number of UT students who ride the bus. This is most likely because temperature is affected by the hour of the day, so if you hold the hour of the day constant, then the temperature is probably not changing too much, which is a domino effect and also means that the amount of UT students riding the bus isn't too much. 
+
+# Problem 4: Wrangling the Billboard Top 100
+
+## Part A
+
+```{r echo=FALSE}
