@@ -250,3 +250,38 @@ ggplot(musicalDiversity, aes(x = year, y = uniqueSongs)) +
 
 ```
 This graph shows the musical diversity of the Billboard Top 100 over time, measured as the number of unique songs that appeared on the chart each year. The x-axis represents the year, while the y-axis shows the count of unique songs. Data from the years 1958 and 2021 were excluded due to incomplete records. \newline\newline From the graph, we can see that musical diversity increased from the late 1950s to mid 1960s where it plummeted mostly steadily until around the early 2000s where it has gradually increased minus a dip in the early 2010s. The heavy increase from 2019 to 2020 may have been new songs being discovered during the COVID-19 Lockdown. 
+
+
+## Part C
+
+
+```{r echo=FALSE}
+songs10Weeks <- filter(mostPopularSongsSummarize, count >= 10)
+
+tenWeekHitsByArtist <- group_by(songs10Weeks, performer)
+
+artistTenWeekHits <- summarize(tenWeekHitsByArtist, numTenWeekHits = n(), .groups = "keep")
+
+popularArtistTenWeekHits <- filter(artistTenWeekHits, numTenWeekHits >= 30)
+
+
+ggplot(popularArtistTenWeekHits, aes(x = performer, y = numTenWeekHits)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Number of Ten-Week Hits by Artist",
+    x = "Artist",
+    y = "Number of Ten-Week Hits"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1) 
+  )
+
+
+
+
+
+
+
+```
+This bar plot illustrates the number of "ten-week hits" achieved by 19 artists in U.S. musical history since 1958. A "ten-week hit" is defined as a song that remained on the Billboard Top 100 for at least ten weeks. The x-axis lists the artists, and the y-axis shows the total count of "ten-week hits" for each artist. The plot is meant to show the popularity of these artists' songs on the Billboard charts. 
