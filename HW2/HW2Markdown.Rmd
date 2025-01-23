@@ -6,7 +6,7 @@ date: "2025-01-18"
 output: pdf_document
 ---
 
-### UTEID: as236366
+### UT EID: as236366
 
 ### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW2/HW2Markdown.Rmd>
 
