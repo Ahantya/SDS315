@@ -200,12 +200,12 @@ This graph displays the average boardings (y-axis) by the hour of the day (x-axi
 
 capData2 <- group_by(capmetro_UT, temperature, weekend, hour_of_day)
 
-capData2Summary <- summarize(capData2, avgBoardings = mean(boarding), .groups = "keep")
+capData2Summary <- summarize(capData2, totalBoardings = sum(boarding), .groups = "keep")
 
 
 ggplot(capData2Summary) +
-  geom_point(aes(x = temperature, y = avgBoardings, color=weekend, group=weekend), size=0.6) +
-  labs(x = "Temperature", y = "Average Boardings", title = "Avg. Boardings by Temperature, Hour of the Day, and Weekend/Weekday", Color = "Weekend/Weekday") +
+  geom_point(aes(x = temperature, y = totalBoardings, color=weekend, group=weekend), size=0.6) +
+  labs(x = "Temperature", y = "Boardings", title = "Boardings by Temperature, Hour of the Day, and Weekend/Weekday", Color = "Weekend/Weekday") +
   facet_wrap(~ hour_of_day) +
   theme_classic() +
   theme(
