@@ -237,7 +237,7 @@ kable(top10Songs,
 
 ```
 
-This table shows the Top 10 most popular songs since 1958 based on the total number of weeks on the Billboard Top 100. The table includes the performer, song title, and the number of weeks each song appeared on the chart.
+This table shows the Top 10 most popular songs since 1958 based on the total number of weeks on the Billboard Top 100. The table includes the performer, song title, and the number of weeks each song appeared on the chart. As you can see, the most popular song (based on the total number of weeks on the Billboard Top 100 since 1958) is Radioactive by Imagine Dragons, which charted 87 times.
 
 \newpage
 
