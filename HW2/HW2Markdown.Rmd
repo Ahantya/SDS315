@@ -26,7 +26,7 @@ billboard <- read.csv("billboard.csv")
 
 ## Part A
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=4, fig.width=4}
 #a
 
 profPlot <- ggplot(prof)
