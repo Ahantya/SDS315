@@ -1,0 +1,19 @@
+---
+title: "HW3 - SDS 315"
+author: "Ahantya Sharma"
+subtitle: ""
+date: "2025-02-06"
+output: pdf_document
+---
+
+### UT EID: as236366
+
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW3/HW3Markdown.Rmd>
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+```
