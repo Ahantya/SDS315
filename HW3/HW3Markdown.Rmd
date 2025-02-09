@@ -36,8 +36,8 @@ ebay <- read.csv('ebay.csv')
 #   labs(title = "Price Changes w/ Competitors?",
 #        x = "Competitors (Yes/No)", y = "Price") +
 #   scale_fill_manual(values = c("Y" = "dodgerblue", "N" = "tomato")) +
-#   theme_minimal()
-
+#   theme_minimal() have this as a backup? i dont know if this is what i should use as a figure?
+ 
 bootCompetitors <- do(10000) * diffmean(Price ~ Competitors, data = resample(gas))
 
 ggplot(bootCompetitors, aes(x = diffmean)) +
