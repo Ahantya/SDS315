@@ -59,7 +59,7 @@ Claim: Gas stations charge more if they lack direct competition in sight.
 
 Evidence: At a 95% confidence interval, the difference in mean prices between gas stations with competitors and gas stations without competitors is from -0.056 to 0.008 dollars. Because a possible difference of zero dollars is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that gas stations charge more if they lack direct competition in sight. 
 
-Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically signficant mean difference between prices and gas stations with / without competition in sight.  
+Conclusion: The theory is **unsupported** by the evidence, as there is no data to support a statistically signficant mean difference between prices and gas stations with / without competition in sight.  
 
 
 
@@ -99,7 +99,7 @@ Claim: The richer the area, the higher the gas prices.
 
 Evidence: At a 95% confidence interval, the correlation in prices between gas stations and the median household income in the surrounding of the gas station ranges from 0.196 to 0.567 dollars. Since the possibility difference of zero dollars is not contained within the interval, there is statistical significance (at the 5% level) to claim that the richer the area, the higher the gas prices. 
 
-Conclusion: The theory is supported by the evidence, as there is data to support a statistically significant correlation between the median household income and the gas prices. 
+Conclusion: The theory is **supported** by the evidence, as there is data to support a statistically significant correlation between the median household income and the gas prices. 
 
 \newpage 
 
@@ -141,7 +141,7 @@ Claim: Gas stations at stoplights charge more.
 
 Evidence: At a 95% confidence interval, the difference in mean prices for gas stations at stoplights and gas stations not at stoplights ranges from -0.039 to 0.306 dollars. Because a possible difference of zero dollars is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that gas stations at stoplights charge more. 
 
-Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically significant mean difference between gas station prices at a stoplight and gas station prices not at a stoplight. 
+Conclusion: The theory is **unsupported** by the evidence, as there is no data to support a statistically significant mean difference between gas station prices at a stoplight and gas station prices not at a stoplight. 
 
 
 ## D. 
@@ -178,7 +178,7 @@ Claim: Gas stations with direct highway access charge more.
 
 Evidence: At a 95% confidence interval, the difference in mean prices for gas stations with direct highway access and gas stations without direct highway access ranges from 0.008 to 0.082 dollars. Since the possibility difference of zero dollars is not contained within the interval, there is statistical significance (at the 5% level) to claim that gas stations with direct highway access charge slightly more than gas stations without direct highway access.
 
-Conclusion: The theory is supported by the evidence, as there is data to support a statistically significant mean difference between gas stations with direct highway access and gas stations without direct highway access.
+Conclusion: The theory is **supported** by the evidence, as there is data to support a statistically significant mean difference between gas stations with direct highway access and gas stations without direct highway access.
 
 
 ## E. 
@@ -213,7 +213,7 @@ Claim: Shell charges more than all other non-Shell brands.
 
 Evidence: At a 95% confidence interval, the mean difference in gas station prices at Shell Gas Stations and non-Shell gas stations range from -0.011 to 0.065 dollars. Because a possible difference of zero dollars is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that Shell charges more than all other non-Shell branded gas stations. 
 
-Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically significant mean difference between gas station prices at Shell gas stations and gas station prices at non-Shell gas stations
+Conclusion: The theory is **unsupported** by the evidence, as there is no data to support a statistically significant mean difference between gas station prices at Shell gas stations and gas station prices at non-Shell gas stations
 
 
 # Problem 2 - Mercedes S-Class Vehicles
@@ -239,7 +239,7 @@ sclassPartAConfint <- confint(sclassPartABoot, level=0.95) #gets 95% confidence 
 sclassPartAConfint
 ```
 
-With 95% confidence, the average mileage of all 2011 S-Class 63 AMGs that were hitting the used-car market when this data was collected ranged from 26226 to 31823 miles. 
+With 95% confidence, the average mileage of all 2011 S-Class 63 AMGs that were hitting the used-car market when this data was collected ranged from **26226 to 31823 miles**. 
 
 
 ## Part B - 2014 S-Class 550s
@@ -265,7 +265,7 @@ sclassPartBConfint
 
 ```
 
-With 95% confidence, the proportion of all 2014 S-Class 550s that were painted black ranged from 0.417 to 0.453 when this data was collected. In other words, 41.7% to 45.3% of 2014 S-Class 550s listed in the market (from this data) were painted black. 
+With 95% confidence, the proportion of all 2014 S-Class 550s that were painted black ranged from **0.417 to 0.453** when this data was collected. In other words, 41.7% to 45.3% of 2014 S-Class 550s listed in the market (from this data) were painted black. 
 
 # Question 3 - NBC Pilot Surveys
 
@@ -281,15 +281,24 @@ bootHappy <- do(10000) * diffmean(Q1_Happy ~ Show, data = mosaic::resample(showA
 
 ggplot(bootHappy, aes(x = diffmean)) + 
   geom_histogram(fill = "dodgerblue", color = "grey", bins = 30) +
-  labs(title = "Bootstrapped Difference in Happiness Ratings Between Shows",
-       x = "Mean Happiness Difference", y = "Count") +
+  labs(title = "Bootstrapped Difference in 'Q1_Happy' Ratings Between Shows",
+       x = "Mean 'Q1_Happy' Difference", y = "Count") +
   theme_minimal()
 
 
 happyConfidence <- confint(bootHappy, level = 0.95)
 
+happyConfidence
+
 ```
 
+Question: Is there evidence that either (tv show names) "Living with Ed" or "My Name is Earl" consistently produced a higher mean "Q1_Happy" response among viewers?
+
+Approach: First I created a subset of the original data that only contained viewer reponses from people who viewed "Living with Ed" or "My Name is Earl". Then, I resampled the difference of means between the "Q1_Happy" response of both shows 10000 times. Using that bootstrapped data, I constructed a 95% confidence interval to list the range of mean difference between the TV shows' "Q1_Happy" response over the 1000 bootstrap samples. 
+
+Results: With 95% confidence, the mean difference in responses of "Q1_Happy" for viewers who watched "Living with Ed" and viewers who watched "My Name is Earl" ranged from -0.400 to 0.102. Because a possible difference of zero  is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that either show consistely produced a higher mean happiness response among viewers.
+
+Conclusion: This question is **unsupported** by the 95% confidence interval, as there is no data to support a statistically significant mean difference between "Q1_Happy" response of the tv shows' "Living with Ed" and "My Name is Earl". 
 
 
 
@@ -305,15 +314,26 @@ bootAnnoyed <- do(10000) * diffmean(Q1_Annoyed ~ Show, data = resample(showB))
 
 ggplot(bootAnnoyed, aes(x = diffmean)) + 
   geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
-  labs(title = "Bootstrapped Difference in Annoyance Ratings Between Shows",
-       x = "Mean Annoyance Difference", y = "Count") +
+  labs(title = "Bootstrapped Difference in 'Q1_Annoyed' Ratings Between Shows",
+       x = "Mean 'Q1_Annoyed' Difference", y = "Count") +
   theme_minimal()
 
 
 annoyanceConfidence <- confint(bootAnnoyed, level = 0.95)
 
+annoyanceConfidence
+
 
 ```
+
+Question: Is there evidence that either (tv show names) "The Biggest Loser" or "The Apprentice: Los Angeles" consistently produced a higher mean "Q1_Annoyed" response among viewers?
+
+Approach: First I created a subset of the original data that only contained viewer reponses from people who viewed "The Biggest Loser" or "The Apprentice: Los Angeles". Then, I resampled the difference of means between the "Q1_Annoyed" response of both shows 10000 times. Using that bootstrapped data, I constructed a 95% confidence interval to list the range of mean difference between the TV shows' "Q1_Annoyed" response over the 1000 bootstrap samples.
+ 
+Results: With 95% confidence, the mean difference in responses of "Q1_Annoyed" for viewers who watched "The Biggest Lose" and viewers who watched "The Apprentice: Los Angeles" ranged from -0.523 to -0.016. Because zero is not contained within the 95% confidence interval, there is statistical significance (at the 5% level) to claim that either  "The Biggest Loser" or "The Apprentice: Los Angeles" consistently produced a higher mean "Q1_Annoyed" response among viewers.
+
+Conclusion: The question is **supported** by the 95% confidence interval, as there is data to support a statistically significant mean difference between "Q1_Annoyed" response of the tv shows' "The Biggest Loser" and "The Apprentice: Los Angeles". Specifically, because the 95% confidence interval range is in the negatives, the evidence supports that "The Apprentice: Los Angeles" made viewers more annoyed compared to viewers of "The Biggest Loser". 
+
 
 
 ## Part C - Proportion of Confusion in Dancing with the Stars
@@ -323,9 +343,9 @@ showC <- filter(nbc, Show == "Dancing with the Stars")
 
 showC <- mutate(showC, isConfused = ifelse(Q2_Confusing >= 4, "Y", "N"))
 
-bootConfused <- do(20000) * prop(~isConfused, data = resample(showC))
+bootConfused <- do(10000) * prop(~isConfused=="Y", data = mosaic::resample(showC))
 
-ggplot(bootConfused, aes(x = prop_N)) + 
+ggplot(bootConfused, aes(x = prop_TRUE)) + 
   geom_histogram(color = "grey", fill = "dodgerblue", bins = 30) + 
   labs(title = "Bootstrapped Prop. of Confused Viewers of 'Dancing with the Stars'",
        x = "Proportion of Confused Viewers",
@@ -334,10 +354,13 @@ ggplot(bootConfused, aes(x = prop_N)) +
 
 confusedConfint <- confint(bootConfused, level = 0.95)
 
-
-
+confusedConfint
 
 ```
+
+Question: What proportion of American TV watchers would we expect to give a response of 4 or greater to the 'Q2_Confusing' question, where 4 indicates agreeing and 5 indicates strongly agreeing with the statement that 'Dancing with the Stars' is a confusing show?
+
+Approach: First, I filtered the data set to only include reponses for the show "Dancing with the Stars". Then, I used the mutate() function to create a new variable, isConfused, which marks respondents who gave a rating of 4 or 5 on Q2_Confusing as "Y" (confused) and those who gave a rating of 1, 2, or 3 as "N" (not confused). Afterwards, I resampled the proportion of respondents who found the show confusing (those with "Y" in isConfused) across 10,000 bootstrap samples using the prop() function. This allows for estimating the proportion of viewers who would give a response of 4 or greater to the "Q2_Confusing" question. Lastly, I constructed the 95% confidence interval to list the proportion of viewers who gave a response of 4 or greater to the "Q2_Confusing" Question over the 1000 bootstrap samples.
 
 # Problem 4  - EBay
 
@@ -356,9 +379,5 @@ ggplot(bootEbay, aes(x = diffmean)) +
        x = "Difference in Revenue Ratios (Treatment - Control)", y = "Count") +
   theme_minimal()
 
-
-
-
-
-
 ```
+
