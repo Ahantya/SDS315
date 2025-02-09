@@ -1,8 +1,6 @@
 ---
 title: "HW3 - SDS 315"
 author: "Ahantya Sharma"
-subtitle: ""
-date: "2025-02-06"
 output: pdf_document
 ---
 
@@ -12,9 +10,278 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(ggplot2)
 library(tidyverse)
 library(knitr)
+library(scales)
+library(tidyverse)
+library(mosaic)
 gas <- read.csv('gasprices.csv')
+sclass <- read.csv('sclass.csv')
+nbc <- read.csv('nbc_pilotsurvey.csv')
+ebay <- read.csv('ebay.csv')
+
+```
+
+# Problem 1 - Gas Prices
+
+## A.
+
+```{r echo=FALSE, fig.height=4, fig.width=4}
+
+
+ggplot(gas, aes(x = Competitors, y = Price, fill = Competitors)) + 
+  geom_boxplot(color = "black") +
+  labs(title = "Price Changes w/ Competitors?",
+       x = "Competitors (Yes/No)", y = "Price") +
+  scale_fill_manual(values = c("Y" = "forestgreen", "N" = "dodgerblue")) + 
+  theme_minimal()
+
+bootCompetitors <- do(10000) * diffmean(Price ~ Competitors, data = resample(gas))
+
+confidenceCompetitors <- confint(bootCompetitors, level = 0.95)
+
+confidenceCompetitors
+
+
+```
+
+Claim: Gas stations charge more if they lack direct competition in sight.
+
+Evidence: At a 95% confidence interval, the difference in mean prices between gas stations with competitors and gas stations without competitors is from -0.056 to 0.008. Because zero is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that gas stations charge more if they lack direct competition in sight. 
+
+Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically signficant difference between prices and gas stations with / without competition in sight.  
+
+
+
+## B.
+
+```{r echo=FALSE}
+
+bootIncomePrice <- do(10000) * cor(resample(gas)$Income, resample(gas)$Price)
+
+ggplot(gas, aes(x = Income, y = Price)) + 
+  geom_point(color = "forestgreen") +
+  labs(title = "Correlation Between Gas Price and Income",
+       x = "Income", y = "Gas Price") + scale_x_continuous(labels = comma) + 
+  theme_minimal()
+
+incomePrice <- confint(bootIncomePrice, level = 0.95)
+
+incomePrice
+
+
+
+```
+
+Claim: The richer the area, the higher the gas prices.
+
+Evidence: At a 95% confidence interval, the correlation in prices between gas stations and the median household income in the surrounding of the gas station ranges from are -0.189 to 0.203. Because zero is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that gas stations charge more if they lack direct competition in sight. 
+
+Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically significant correlation between the median household income and the gas prices. 
+
+\newpage 
+
+## C.
+
+```{r echo=FALSE}
+
+bootStop <- do(10000) * diffmean(Price ~ Stoplight, data = resample(gas))
+
+
+bootStopConfidence <- confint(bootStop, level = 0.95)
+
+bootStopConfidence
+
+
+
+
+
+```
+
+Claim: Gas stations at stoplights charge more. 
+
+Evidence: At a 95% confidence interval, -0.039 to 0.306
+
+
+## D. 
+
+```{r echo=FALSE}
+bootHighway <- do(10000) * diffmean(Price ~ Highway, data = resample(gas))
+
+ggplot(bootHighway, aes(x = diffmean)) + 
+  geom_histogram(fill = "dodgerblue", color = "grey", bins = 30) +
+  labs(title = "Does Direct Highway Access increase Gas Prices? (Boostrapped)",
+       x = "Price Difference (USD)", y = "Count") +
+  theme_minimal()
+
+highwayConfidence <- confint(bootHighway, level = 0.95)
+
+ # doesnt have zero in diffmean
+```
+
+Claim: Gas stations with direct highway access charge more.
+
+
+## E. 
+
+```{r echo=FALSE}
+
+gas$Shell <- ifelse(gas$Brand == "Shell", "Shell", "Non-Shell")
+
+bootShell <- do(10000) * diffmean(Price ~ Shell, data = resample(gas))
+
+ggplot(bootShell, aes(x = diffmean)) + 
+  geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
+  labs(title = "Does Shell charge more than Other Brands? (Boostrapped)",
+       x = "Price Difference (USD)", y = "Count") +
+  theme_minimal()
+
+shellConfidence <- confint(bootShell, level = 0.95)
+
+
+
+
+```
+
+Claim: Shell charges more than all other non-Shell brands.
+
+
+# Problem 2 - Mercedes S-Class Vehicles
+
+## Part A - 2011 S-Class 63 AMGs
+
+
+```{r echo=FALSE}
+
+sclassPartA <- filter(sclass, year == 2011, trim == "63 AMG")
+
+sclassPartABoot <- do(10000) * mean(resample(sclass$mileage)) #computes average mileage for bootsample per instructions
+
+ggplot(sclassPartABoot, aes(x = mean)) +
+  geom_histogram(color = "grey", fill = "dodgerblue", bins = 30) +
+  labs(title = "Boostrapped Average Mileage (2011 63 AMG)",
+       x = "Average Mileage",
+       y = "Frequency") +
+  theme_minimal()
+
+sclassPartAConfint <- confint(sclassPartABoot, level=0.95) #gets 95% confidence interval for this now 
+```
+
+
+## Part B - 2014 S-Class 550s
+
+```{r echo=FALSE}
+
+sclass <- mutate(sclass, isBlack = ifelse(color=="Black", "Y", "N")) # does mutation given in hint 
+
+sclassPartB <- filter(sclass, year == 2014, trim == "550")
+
+sclassPartBBoot <- do(10000) * prop(~isBlack, data = resample(sclassPartB))
+
+ggplot(sclassPartBBoot, aes(x = prop_N)) +
+  geom_histogram(color = "black", fill = "forestgreen", bins = 30) +
+  labs(title = "Boostrapped Proportion of Black 550s in 2014",
+       x = "Proportion of Black Cars",
+       y = "Frequency") +
+  theme_minimal()
+
+sclassPartBConfint <- confint(sclassPartBBoot, level=0.95)
+
+```
+
+# Question 3 - NBC Pilot Surveys
+
+## Part A - Difference of Means in Happiness
+
+
+```{r echo=FALSE}
+
+showA <- subset(nbc, Show %in% c("Living with Ed", "My Name is Earl"))
+
+
+bootHappy <- do(10000) * diffmean(Q1_Happy ~ Show, data = resample(showA))
+
+
+ggplot(bootHappy, aes(x = diffmean)) + 
+  geom_histogram(fill = "dodgerblue", color = "grey", bins = 30) +
+  labs(title = "Bootstrapped Difference in Happiness Ratings Between Shows",
+       x = "Mean Happiness Difference", y = "Count") +
+  theme_minimal()
+
+
+happyConfidence <- confint(bootHappy, level = 0.95)
+
+```
+
+
+## Part B -  Difference of Means in Annoyingness
+
+```{r echo=FALSE}
+
+showB <- subset(nbc, Show %in% c("The Biggest Loser", "The Apprentice: Los Angeles"))
+
+
+bootAnnoyed <- do(10000) * diffmean(Q1_Annoyed ~ Show, data = resample(showB))
+
+
+ggplot(bootAnnoyed, aes(x = diffmean)) + 
+  geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
+  labs(title = "Bootstrapped Difference in Annoyance Ratings Between Shows",
+       x = "Mean Annoyance Difference", y = "Count") +
+  theme_minimal()
+
+
+annoyanceConfidence <- confint(bootAnnoyed, level = 0.95)
+
+
+```
+
+
+## Part C - Proportion of Confusion in Dancing with the Stars
+
+```{r echo=FALSE}
+showC <- filter(nbc, Show == "Dancing with the Stars")
+
+showC <- mutate(showC, isConfused = ifelse(Q2_Confusing >= 4, "Y", "N"))
+
+bootConfused <- do(20000) * prop(~isConfused, data = resample(showC))
+
+ggplot(bootConfused, aes(x = prop_N)) + 
+  geom_histogram(color = "grey", fill = "dodgerblue", bins = 30) + 
+  labs(title = "Bootstrapped Prop. of Confused Viewers of 'Dancing with the Stars'",
+       x = "Proportion of Confused Viewers",
+       y = "Frequency") +
+  theme_minimal()
+
+confusedConfint <- confint(bootConfused, level = 0.95)
+
+
+
+
+```
+
+# Problem 4  - EBay
+
+```{r echo=FALSE}
+
+ebay <- mutate(ebay, rev_ratio = rev_after / rev_before)
+
+
+bootEbay <- do(10000) * diffmean(rev_ratio ~ adwords_pause, data = resample(ebay))
+
+ebayConfint <- confint(bootEbay, level = 0.95)
+
+ggplot(bootEbay, aes(x = diffmean)) + 
+  geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
+  labs(title = "Bootstrap Distribution of Difference in Revenue Ratios",
+       x = "Difference in Revenue Ratios (Treatment - Control)", y = "Count") +
+  theme_minimal()
+
+
+
+
+
+
 ```
