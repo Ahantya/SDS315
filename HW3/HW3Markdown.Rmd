@@ -12,7 +12,6 @@ output: pdf_document
 
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(ggplot2)
-library(tidyverse)
 library(knitr)
 library(scales)
 library(tidyverse)
@@ -38,7 +37,7 @@ ebay <- read.csv('ebay.csv')
 #   scale_fill_manual(values = c("Y" = "dodgerblue", "N" = "tomato")) +
 #   theme_minimal() have this as a backup? i dont know if this is what i should use as a figure?
  
-bootCompetitors <- do(10000) * diffmean(Price ~ Competitors, data = resample(gas))
+bootCompetitors <- do(10000) * diffmean(Price ~ Competitors, data = mosaic::resample(gas))
 
 ggplot(bootCompetitors, aes(x = diffmean)) +
   geom_histogram(fill = "dodgerblue", color = "black", bins = 30) +
@@ -68,7 +67,11 @@ Conclusion: The theory is unsupported by the evidence, as there is no data to su
 
 ```{r echo=FALSE}
 
-bootIncomePrice <- do(10000) * cor(resample(gas)$Income, resample(gas)$Price)
+bootIncomePrice <- do(10000) * {
+  resampleGas <- mosaic::resample(gas)
+  cor(resampleGas$Income, resampleGas$Price)
+}
+
 
 # ggplot(gas, aes(x = Income, y = Price)) +
 #   geom_point(color = "dodgerblue") +
@@ -76,7 +79,7 @@ bootIncomePrice <- do(10000) * cor(resample(gas)$Income, resample(gas)$Price)
 #        x = "Income", y = "Gas Price") + scale_x_continuous(labels = comma) +
 #   theme_minimal()
 
-ggplot(bootIncomePrice, aes(x = cor)) +
+ggplot(bootIncomePrice, aes(x = result)) +
   geom_histogram(fill = "dodgerblue", color = "black", bins = 30) +
   labs(title = "Bootstrap Distribution of Correlation: Income vs. Gas Price",
        x = "Correlation (Income & Gas Price)",
@@ -94,9 +97,9 @@ incomePrice
 
 Claim: The richer the area, the higher the gas prices.
 
-Evidence: At a 95% confidence interval, the correlation in prices between gas stations and the median household income in the surrounding of the gas station ranges from are -0.189 to 0.203 dollars. Because a possible difference of zero dollars is contained within this confidence interval, there is no statistical significance (at the 5% level) to claim that gas stations charge more if they lack direct competition in sight. 
+Evidence: At a 95% confidence interval, the correlation in prices between gas stations and the median household income in the surrounding of the gas station ranges from 0.196 to 0.567 dollars. Since the possibility difference of zero dollars is not contained within the interval, there is statistical significance (at the 5% level) to claim that the richer the area, the higher the gas prices. 
 
-Conclusion: The theory is unsupported by the evidence, as there is no data to support a statistically significant correlation between the median household income and the gas prices. 
+Conclusion: The theory is supported by the evidence, as there is data to support a statistically significant correlation between the median household income and the gas prices. 
 
 \newpage 
 
@@ -104,7 +107,7 @@ Conclusion: The theory is unsupported by the evidence, as there is no data to su
 
 ```{r echo=FALSE}
 
-bootStop <- do(10000) * diffmean(Price ~ Stoplight, data = resample(gas))
+bootStop <- do(10000) * diffmean(Price ~ Stoplight, data = mosaic::resample(gas))
 
 
 bootStopConfidence <- confint(bootStop, level = 0.95)
@@ -144,7 +147,7 @@ Conclusion: The theory is unsupported by the evidence, as there is no data to su
 ## D. 
 
 ```{r echo=FALSE}
-bootHighway <- do(10000) * diffmean(Price ~ Highway, data = resample(gas))
+bootHighway <- do(10000) * diffmean(Price ~ Highway, data = mosaic::resample(gas))
 
 
 # ggplot(gas, aes(x = Highway, y = Price, fill = Highway)) +
@@ -184,7 +187,7 @@ Conclusion: The theory is supported by the evidence, as there is data to support
 
 gas$Shell <- ifelse(gas$Brand == "Shell", "Y", "N")
 
-bootShell <- do(10000) * diffmean(Price ~ Shell, data = resample(gas))
+bootShell <- do(10000) * diffmean(Price ~ Shell, data = mosaic::resample(gas))
 
 ggplot(bootShell, aes(x = diffmean)) +
 geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
@@ -222,7 +225,7 @@ Conclusion: The theory is unsupported by the evidence, as there is no data to su
 
 sclassPartA <- filter(sclass, year == 2011, trim == "63 AMG")
 
-sclassPartABoot <- do(10000) * mean(resample(sclass$mileage)) #computes average mileage for bootsample per instructions
+sclassPartABoot <- do(10000) * mean(~mileage, data = mosaic::resample(sclassPartA)) #computes average mileage for bootsample per instructions
 
 ggplot(sclassPartABoot, aes(x = mean)) +
   geom_histogram(color = "grey", fill = "dodgerblue", bins = 30) +
@@ -232,7 +235,11 @@ ggplot(sclassPartABoot, aes(x = mean)) +
   theme_minimal()
 
 sclassPartAConfint <- confint(sclassPartABoot, level=0.95) #gets 95% confidence interval for this now 
+
+sclassPartAConfint
 ```
+
+With 95% confidence, the average mileage of all 2011 S-Class 63 AMGs that were hitting the used-car market when this data was collected ranged from 26226 to 31823 miles. 
 
 
 ## Part B - 2014 S-Class 550s
@@ -243,9 +250,9 @@ sclass <- mutate(sclass, isBlack = ifelse(color=="Black", "Y", "N")) # does muta
 
 sclassPartB <- filter(sclass, year == 2014, trim == "550")
 
-sclassPartBBoot <- do(10000) * prop(~isBlack, data = resample(sclassPartB))
+sclassPartBBoot <- do(10000) * prop(~isBlack=="Y", data = mosaic::resample(sclassPartB))
 
-ggplot(sclassPartBBoot, aes(x = prop_N)) +
+ggplot(sclassPartBBoot, aes(x = prop_TRUE)) +
   geom_histogram(color = "black", fill = "forestgreen", bins = 30) +
   labs(title = "Boostrapped Proportion of Black 550s in 2014",
        x = "Proportion of Black Cars",
@@ -254,7 +261,11 @@ ggplot(sclassPartBBoot, aes(x = prop_N)) +
 
 sclassPartBConfint <- confint(sclassPartBBoot, level=0.95)
 
+sclassPartBConfint
+
 ```
+
+With 95% confidence, the proportion of all 2014 S-Class 550s that were painted black ranged from 0.417 to 0.453 when this data was collected. In other words, 41.7% to 45.3% of 2014 S-Class 550s listed in the market (from this data) were painted black. 
 
 # Question 3 - NBC Pilot Surveys
 
@@ -266,8 +277,7 @@ sclassPartBConfint <- confint(sclassPartBBoot, level=0.95)
 showA <- subset(nbc, Show %in% c("Living with Ed", "My Name is Earl"))
 
 
-bootHappy <- do(10000) * diffmean(Q1_Happy ~ Show, data = resample(showA))
-
+bootHappy <- do(10000) * diffmean(Q1_Happy ~ Show, data = mosaic::resample(showA))
 
 ggplot(bootHappy, aes(x = diffmean)) + 
   geom_histogram(fill = "dodgerblue", color = "grey", bins = 30) +
@@ -279,6 +289,8 @@ ggplot(bootHappy, aes(x = diffmean)) +
 happyConfidence <- confint(bootHappy, level = 0.95)
 
 ```
+
+
 
 
 ## Part B -  Difference of Means in Annoyingness
