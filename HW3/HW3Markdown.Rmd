@@ -34,7 +34,7 @@ bootCompetitors <- do(10000) * diffmean(Price ~ Competitors, data = mosaic::resa
 ggplot(bootCompetitors, aes(x = diffmean)) +
   geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
   labs(title = "Bootstrapped Gas Price Difference",
-       x = "Mean Price Difference (Competitors - No Competitors)",
+       x = "Mean Price Difference (Competitors - No Comp.)",
        y = "Count") +
   theme_minimal()
 
@@ -161,7 +161,7 @@ bootShell <- do(10000) * diffmean(Price ~ Shell, data = mosaic::resample(gas))
 
 ggplot(bootShell, aes(x = diffmean)) +
 geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
-labs(title = "Does Shell charge more than Other Brands? (Boostrapped)",
+labs(title = "Bootstrapped Distribution of Shell Prices vs Other Brands",
  x = "Price Difference (USD)", y = "Count") +
 theme_minimal()
 
@@ -281,7 +281,7 @@ bootAnnoyed <- do(10000) * diffmean(Q1_Annoyed ~ Show, data = resample(showB))
 ggplot(bootAnnoyed, aes(x = diffmean)) +
   geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
   labs(title = "Bootstrapped Difference in 'Q1_Annoyed' Ratings Between Shows",
-       x = "Mean 'Q1_Annoyed' Difference", y = "Count") +
+       x = "Mean 'Q1_Annoyed' Difference (The Biggest Loser - The Apprentice: Los Angeles)", y = "Count") +
   theme_minimal()
 
 
@@ -334,7 +334,7 @@ Conclusion: The question is **supported** by the 95% confidence interval, as the
 
 # Problem 4  - EBay
 
-```{r echo=FALSE, fig.height=4, fig.width=4}
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
 
 ebay <- mutate(ebay, rev_ratio = rev_after / rev_before)
 
@@ -345,7 +345,7 @@ ebayConfint <- confint(bootEbay, level = 0.95)
 
 ggplot(bootEbay, aes(x = diffmean)) +
   geom_histogram(fill = "forestgreen", color = "black", bins = 30) +
-  labs(title = "Bootstrap Distribution of Difference in Revenue Ratios",
+  labs(title = "Distribution of Difference in Revenue Ratios",
        x = "Difference in Revenue Ratios (Treatment - Control)", y = "Count") +
   theme_minimal()
 
