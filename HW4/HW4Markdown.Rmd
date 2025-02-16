@@ -27,6 +27,8 @@ ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
 
 pValue1 = sum(iron >= 70) / 100000
 
+# 70 is what is observed 
+
 ```
 
 With the assumption of the null hypothesis being true, this histogram shows the distribution (of 100000 simulations) of the amount of flagged trades out of 2021 trades. 
@@ -59,6 +61,8 @@ The test statistic used to measure evidence against the null hypothesis is the n
 
 The p-value is approximately 0.0001, which means that there is only a 0.01% probability of observing 8 or more health code violations out of 50 by chance if the true rate of health code violations for Gourmet Bites was the same as the citywide average (3%). This means that we have strong evidence against any plausibility of the null hypothesis because Gourmet Bites is most likely violating health code inspections at a higher rate than the citywide average at 3%. 
 
+\newpage
+
 # Problem 3 - Evaluating Jury Selection for Bias
 
 ```{r echo=FALSE}
@@ -69,11 +73,11 @@ observedCount = c(Group1 = 85, Group2 = 56, Group3 = 59, Group4 = 27, Group5 = 1
 
 numJurors = 240
 
-chiObserved = chi_squared_statistic(observedCount, expectedDistribution * numJurors)
-
-chi_squared_statistic = function(observed, expected) {
+chi_squared_statistic <- function(observed, expected) {
   sum((observed - expected)^2 / expected)
 }
+
+chiObserved = chi_squared_statistic(observedCount, expectedDistribution * numJurors)
 
 chiSim = do(100000)*{
   simulatedCounts = rmultinom(1, numJurors, expectedDistribution) # simulates 1 distribution of 240 jurors across given expected distribution.
@@ -90,6 +94,8 @@ In this question, we are testing whether the jury selection process is biased. S
 The test statistic used to measure evidence against the null hypothesis is the chi-squared statistic. Specifically, we're using the chi-squared statistic within 20 trials, so 240 jurors.
 
 The p-value is approximately 0.0137, meaning that there is a 1.37% probability of observing a chi-squared value as extreme as or more extreme than the observed one, purely due to random chance, assuming the null hypothesis is true. This means that the null hypothesis should be rejected, as the distribution of jurors empaneled by this judge is significantly different from the county’s population proportions. Most likely, there is systematic bias in jury selection by this judge, but it's not 100% definite. Other explanations that may explain the bias could be the difference of work schedules and even socioeconomic factors. To investigate this further and come to an even clearer conclusion, we could explore the pool of jurors, and specifically particular demographic groups are less likely to be called for jury duty based on factors like availability or location in the initial selection pool.
+
+\newpage
 
 
 # Problem 4 - LLM watermarking
@@ -108,37 +114,87 @@ chi_squared_statistic = function(observed, expected) {
   sum((observed - expected)^2 / expected)
 }
 
-letterFrequency <- function(sentence) {
-  letterCounts <- table(strsplit(sentence, ""))  
-  return(letterCounts)
-}
-
-cleanText <- function(text) {
-  cleanText = gsub("[^A-Za-z]", "", sentences[i])  
-  cleanText = toupper(cleanText)
-  return (cleanText)
-}
 
 cleanSentences <- vector("character", length(sentences))
-for (i in 1:length(sentences)) {
-  cleanSentence = cleanText(sentences[i])
-  observedCounts = sum(table(factor(strsplit(cleanSentence, "")[[1]], levels = letterFreq$Letter)))
-  expectedCounts = observedCounts * letterFreq$Probability
-  chiSquaredValues[i] = chi_squared_statistic(observedCounts, expectedCounts)
 
+calculateSentence <- function(sentence, letterFreq) {
+  cleanSentence <- gsub("[^A-Za-z]", "", sentence)
+  cleanSentence <- toupper(cleanSentence)
+  observedCounts <- table(factor(strsplit(cleanSentence, "")[[1]], levels = letterFreq$Letter))
+  expectedCounts <- sum(observedCounts) * letterFreq$Probability
+  chiSquaredValue <- chi_squared_statistic(observedCounts, expectedCounts)
+  return(chiSquaredValue)
 }
 
+for (i in 1:length(sentences)) {
+  chiSquaredValues[i] = calculateSentence(sentences[i], letterFreq)
+}
+
+
+
 chiSquaredDF <- data.frame(chiSquared = chiSquaredValues)
-ggplot(chiSquaredDF) + geom_histogram(bins = 30, aes(x=chiSquared)) + scale_x_continuous(labels = label_number(scale = 1))
+ggplot(chiSquaredDF) + 
+  geom_histogram(bins = 30, aes(x=chiSquared)) + 
+  scale_x_continuous(labels = scales::comma)
 
 ```
 
-This displays the null distribution of the chi-squared test statistic based on letter frequency by using a collection of sentences from the Brown Corpus. 
+This displays the null distribution of the chi-squared test statistic based on letter frequency by using a collection of sentences from the Brown Corpus.
+
+\newpage
 
 ## Problem B - Checking for a Watermark
 
 ```{r echo=FALSE}
 
+check <- c(
+  "She opened the book and started to read the first chapter, eagerly anticipating what might come next.",
+  "Despite the heavy rain, they decided to go for a long walk in the park, crossing the main avenue by the fountain in the center.",
+  "The museum’s new exhibit features ancient artifacts from various civilizations around the world.",
+  "He carefully examined the document, looking for any clues that might help solve the mystery.",
+  "The students gathered in the auditorium to listen to the guest speaker’s inspiring lecture.",
+  "Feeling vexed after an arduous and zany day at work, she hoped for a peaceful and quiet evening at home, cozying up after a quick dinner with some TV, or maybe a book on her upcoming visit to Auckland.",
+  "The chef demonstrated how to prepare a delicious meal using only locally sourced ingredients, focusing mainly on some excellent dinner recipes from Spain.",
+  "They watched the sunset from the hilltop, marveling at the beautiful array of colors in the sky.",
+  "The committee reviewed the proposal and provided many points of useful feedback to improve the project’s effectiveness.",
+  "Despite the challenges faced during the project, the team worked tirelessly to ensure its successful completion, resulting in a product that exceeded everyone’s expectations."
+)
+
+chi_squared_statistic <- function(observed, expected) {
+  sum((observed - expected)^2 / expected)
+}
+
+
+pValueList = c()
+
+
+for (sentence in check) {
+  testChi = calculateSentence(sentence, letterFreq)
+  tempPValue = sum(chiSquaredValues >= testChi) / length(chiSquaredValues)
+  # the null distribution is expected, so we see how many chi-square values that are expected are more than the observed chi-square values for the p-value. if the p-value is small here, it means that the observed chi-square value deviates a lot from the regular count of a normal sentence, so it's most likely LLM watermarked as it's not close to the expected count of a normal sentence. 
+  pValueList = c(pValueList, tempPValue)
+}
+
+shortenSentence <- function(sentence, numWords = 5) {
+  words <- unlist(strsplit(sentence, " "))
+  shortened <- paste(words[1:numWords], collapse = " ")
+  return(shortened)
+}
+
+
+shortenedSentences = lapply(check, shortenSentence)
+
+shortenedSentences = (unlist(shortenedSentences))
+
+
+roundedPValueList = data.frame(
+  Sentence = shortenedSentences,
+  PValue = round(pValueList, 3)
+)
+
+roundedPValueList
 
 
 ```
+
+Sentence 6 has the lowest p-value at 0.009. This means that the observed letter frequencies in that sentence deviate the most from what we would expect in typical English text. As a result, this means it has an unusual or non-typical letter distribution than what we'd expect written from a human, so this sentence has been watermarked by an LLM. 
