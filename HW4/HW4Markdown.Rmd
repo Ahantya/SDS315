@@ -29,13 +29,60 @@ pValue = sum(iron >= 70) / 100000
 
 ```
 
-This histogram shows the distribution (of 100000 simulations) of the amount of flagged trades out of 2021 trades. 
+With the assumption of the null hypothesis being true, this histogram shows the distribution (of 100000 simulations) of the amount of flagged trades out of 2021 trades. 
 
 In this question, the null hypothesis being tested is that, over the long run, securities trades from the Iron Bank are flagged at the same 2.4% baseline rate as that of other traders. 
 
-The test statistic used to measure evidence against the null hypothesis is the number of flagged trades. Specifically, we are observing the amount of simulations where there are over 70 flagged trades in 2021 trades. 
+The test statistic used to measure evidence against the null hypothesis is the number of flagged trades out of 2021 trades. Specifically, we are observing the amount of simulations where there are 70 or more flagged trades in 2021 trades. 
 
-The p-value is approximately 0.0019, which means that, there is only a 0.19% probability of observing 70 or more flagged trades in 2021 trades (out of chance) if the true flagging rate was 2.4%. This means that we have strong evidence against any plausibility of the null hypothesis because the Iron Bank is most likely engaging often in illegal trade (more than the baseline rate). 
+The p-value is approximately 0.0019, which means that, there is only a 0.19% probability of observing 70 or more flagged trades in 2021 trades out of chance if the true flagging rate was 2.4%. This means that we have strong evidence against any plausibility of the null hypothesis because the Iron Bank is most likely engaging often in illegal trade (more than the baseline rate). 
 
+# Problem 2 - Health Inspections
 
+```{r echo=FALSE}
 
+gourmet = do(100000) * nflip(50, 0.03) #50 bc we are dealing with gourmet bites
+
+ggplot(gourmet) + geom_histogram(aes(x=nflip), binwidth=1)
+
+pValue = sum(gourmet >= 8) / 100000 # 8 bc we want to see if the observed number is happening at a higher rate than it should with chance
+
+pValue = format(pValue, scientific = FALSE)
+
+```
+
+With the assumption of the null hypothesis being true, this histogram shows the distribution (of 100000 simulations) of the amount of health code inspections (out of 50) from Gourmet Bites. 
+
+In this question, the null hypothesis that is being tested is that the rate of health code violations for Gourmet Bites is the same as the citywide average, which is 3%. 
+
+The test statistic used to measure evidence against the null hypothesis is the number of health code violations from Gourmet Bites out of 50. Specifically, we are observing the amount of simulations where there are 8 or more health code violations from Gourmet Bites out of 50. 
+
+The p-value is approximately 0.0001, which means that there is only a 0.01% probability of observing 8 or more health code violations out of 50 by chance if the true rate of health code violations for Gourmet Bites was the same as the citywide average (3%). This means that we have strong evidence against any plausibility of the null hypothesis because Gourmet Bites is most likely violating health code inspections at a higher rate than the citywide average at 3%. 
+
+# Problem 3 - Evaluating Jury Selection for Bias
+
+```{r echo=FALSE}
+
+expectedDistribution = c(Group1 = 0.3, Group2 = 0.25, Group3 = 0.2, Group4 = 0.15, Group5 = 0.1)
+
+observedCount = c(Group1 = 85, Group2 = 56, Group3 = 59, Group4 = 27, Group5 = 13)
+
+numJurors = 240
+
+chiObserved = chi_squared_statistic(observedCount, expectedDistribution * numJurors)
+
+chi_squared_statistic = function(observed, expected) {
+  sum((observed - expected)^2 / expected)
+}
+
+chiSim = do(100000)*{
+  simulatedCounts = rmultinom(1, numJurors, expectedDistribution) # simulates 1 distribution of 240 jurors across given expected distribution.
+  this_chi = chi_squared_statistic(simulatedCounts, numJurors * expectedDistribution)
+  c(chi = this_chi) # return a vector with the chi-squared value
+}
+
+pValue = sum(chiSim$chi >= chiObserved) / 100000
+
+```
+
+In this question, 
