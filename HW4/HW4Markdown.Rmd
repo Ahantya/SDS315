@@ -85,4 +85,19 @@ pValue = sum(chiSim$chi >= chiObserved) / 100000
 
 ```
 
-In this question, 
+In this question, we are testing whether the jury selection process is biased. Specifically, the null hypothesis being tested is that the distribution of jurors across different groups follows the same expected distribution, meaning that there is no bias in the jury selection process.
+
+The test statistic used to measure evidence against the null hypothesis is the chi-squared statistic. Specifically, we're using the chi-squared statistic within 20 trials, so 240 jurors.
+
+The p-value is approximately 0.0137, meaning that there is a 1.37% probability of observing a chi-squared value as extreme as or more extreme than the observed one, purely due to random chance, assuming the null hypothesis is true. This means that the null hypothesis should be rejected, as the distribution of jurors empaneled by this judge is significantly different from the county’s population proportions. Most likely, there is systematic bias in jury selection by this judge, but it's not 100% definite. Other explanations that may explain the bias could be the difference of work schedules and even socioeconomic factors. To investigate this further and come to an even clearer conclusion, we could explore the pool of jurors, and specifically particular demographic groups are less likely to be called for jury duty based on factors like availability or location in the initial selection pool.
+
+
+# Problem 4 - LLM watermarking
+
+
+## Part A - Null or Reference Distribution
+
+```{r echo=FALSE}
+
+
+```
