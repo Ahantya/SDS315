@@ -1,0 +1,41 @@
+---
+title: "HW4 - SDS315"
+author: "Ahantya Sharma"
+output: pdf_document
+---
+
+### UT EID: as236366
+
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW3/HW3Markdown.Rmd>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(tidyverse)
+library(mosaic)
+```
+
+# Problem 1 - Iron Bank
+
+```{r echo=FALSE, fig.height=4, fig.width=4}
+
+iron = do(100000)*nflip(2021, 0.024)
+
+ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
+
+pValue = sum(iron >= 70) / 100000
+
+```
+
+This histogram shows the distribution (of 100000 simulations) of the amount of flagged trades out of 2021 trades. 
+
+In this question, the null hypothesis being tested is that, over the long run, securities trades from the Iron Bank are flagged at the same 2.4% baseline rate as that of other traders. 
+
+The test statistic used to measure evidence against the null hypothesis is the number of flagged trades. Specifically, we are observing the amount of simulations where there are over 70 flagged trades in 2021 trades. 
+
+The p-value is approximately 0.0019, which means that, there is only a 0.19% probability of observing 70 or more flagged trades in 2021 trades (out of random variation) if the true flagging rate was 2.4%. This means that we have strong evidence against any plausibility of the null hypothesis because the Iron Bank is most likely engaging often in illegal trade (more than the baseline rate). 
+
+
+
