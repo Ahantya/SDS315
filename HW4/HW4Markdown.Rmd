@@ -35,7 +35,7 @@ In this question, the null hypothesis being tested is that, over the long run, s
 
 The test statistic used to measure evidence against the null hypothesis is the number of flagged trades. Specifically, we are observing the amount of simulations where there are over 70 flagged trades in 2021 trades. 
 
-The p-value is approximately 0.0019, which means that, there is only a 0.19% probability of observing 70 or more flagged trades in 2021 trades (out of random variation) if the true flagging rate was 2.4%. This means that we have strong evidence against any plausibility of the null hypothesis because the Iron Bank is most likely engaging often in illegal trade (more than the baseline rate). 
+The p-value is approximately 0.0019, which means that, there is only a 0.19% probability of observing 70 or more flagged trades in 2021 trades (out of chance) if the true flagging rate was 2.4%. This means that we have strong evidence against any plausibility of the null hypothesis because the Iron Bank is most likely engaging often in illegal trade (more than the baseline rate). 
 
 
 
