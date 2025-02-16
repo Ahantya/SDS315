@@ -25,7 +25,7 @@ iron = do(100000)*nflip(2021, 0.024)
 
 ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
 
-pValue = sum(iron >= 70) / 100000
+pValue1 = sum(iron >= 70) / 100000
 
 ```
 
@@ -47,7 +47,7 @@ ggplot(gourmet) + geom_histogram(aes(x=nflip), binwidth=1)
 
 pValue = sum(gourmet >= 8) / 100000 # 8 bc we want to see if the observed number is happening at a higher rate than it should with chance
 
-pValue = format(pValue, scientific = FALSE)
+pValue2 = format(pValue, scientific = FALSE)
 
 ```
 
@@ -81,7 +81,7 @@ chiSim = do(100000)*{
   c(chi = this_chi) # return a vector with the chi-squared value
 }
 
-pValue = sum(chiSim$chi >= chiObserved) / 100000
+pValue3 = sum(chiSim$chi >= chiObserved) / 100000
 
 ```
 
@@ -98,6 +98,47 @@ The p-value is approximately 0.0137, meaning that there is a 1.37% probability o
 ## Part A - Null or Reference Distribution
 
 ```{r echo=FALSE}
+sentences <- readLines("/Users/ahan/Desktop/SDS315/HW4/brown_sentences.txt")
+
+letterFreq = read.csv("letter_frequencies.csv")
+
+chiSquaredValues <- numeric(length(sentences))
+
+chi_squared_statistic = function(observed, expected) {
+  sum((observed - expected)^2 / expected)
+}
+
+letterFrequency <- function(sentence) {
+  letterCounts <- table(strsplit(sentence, ""))  
+  return(letterCounts)
+}
+
+cleanText <- function(text) {
+  cleanText = gsub("[^A-Za-z]", "", sentences[i])  
+  cleanText = toupper(cleanText)
+  return (cleanText)
+}
+
+cleanSentences <- vector("character", length(sentences))
+for (i in 1:length(sentences)) {
+  cleanSentence = cleanText(sentences[i])
+  observedCounts = sum(table(factor(strsplit(cleanSentence, "")[[1]], levels = letterFreq$Letter)))
+  expectedCounts = observedCounts * letterFreq$Probability
+  chiSquaredValues[i] = chi_squared_statistic(observedCounts, expectedCounts)
+
+}
+
+chiSquaredDF <- data.frame(chiSquared = chiSquaredValues)
+ggplot(chiSquaredDF) + geom_histogram(bins = 30, aes(x=chiSquared)) + scale_x_continuous(labels = label_number(scale = 1))
+
+```
+
+This displays the null distribution of the chi-squared test statistic based on letter frequency by using a collection of sentences from the Brown Corpus. 
+
+## Problem B - Checking for a Watermark
+
+```{r echo=FALSE}
+
 
 
 ```
