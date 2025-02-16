@@ -117,6 +117,8 @@ chi_squared_statistic = function(observed, expected) {
 
 cleanSentences <- vector("character", length(sentences))
 
+
+# make this a definition so we can use a for loop in part b for each sentence to check p value after getting this chi square value 
 calculateSentence <- function(sentence, letterFreq) {
   cleanSentence <- gsub("[^A-Za-z]", "", sentence)
   cleanSentence <- toupper(cleanSentence)
