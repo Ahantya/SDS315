@@ -124,7 +124,7 @@ cleanSentences <- vector("character", length(sentences))
 calculateSentence <- function(sentence, letterFreq) {
   cleanSentence <- gsub("[^A-Za-z]", "", sentence)
   cleanSentence <- toupper(cleanSentence)
-  observedCounts <- table(factor(strsplit(cleanSentence, "")[[1]], levels = letterFreq$Letter))
+  observedCounts <- table(factor(strsplit(cleanSentence, "")[[1]], levels = letterFreq$Letter)) #counts every letter in sentence and makes sure to include counts of letters that weren't in the sentence as zero, otherwise there is an error if you leave out those letters
   expectedCounts <- sum(observedCounts) * letterFreq$Probability
   chiSquaredValue <- chi_squared_statistic(observedCounts, expectedCounts)
   return(chiSquaredValue)
