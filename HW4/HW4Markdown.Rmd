@@ -14,6 +14,7 @@ library(ggplot2)
 library(knitr)
 library(scales)
 library(tidyverse)
+library(kableExtra)
 library(mosaic)
 ```
 
@@ -168,10 +169,12 @@ chi_squared_statistic <- function(observed, expected) {
 
 
 pValueList = c()
+chiSquaredList = c()
 
 
 for (sentence in check) {
   testChi = calculateSentence(sentence, letterFreq)
+  chiSquaredList = c(chiSquaredList, testChi)
   tempPValue = sum(chiSquaredValues >= testChi) / length(chiSquaredValues)
   # the null distribution is expected, so we see how many chi-square values that are expected are more than the observed chi-square values for the p-value. if the p-value is small here, it means that the observed chi-square value deviates a lot from the regular count of a normal sentence, so it's most likely LLM watermarked as it's not close to the expected count of a normal sentence. 
   pValueList = c(pValueList, tempPValue)
@@ -191,12 +194,16 @@ shortenedSentences = (unlist(shortenedSentences))
 
 roundedPValueList = data.frame(
   Sentence = shortenedSentences,
+  ChiSquared = round(chiSquaredList, 3),
   PValue = round(pValueList, 3)
 )
 
-roundedPValueList
+
+tableVersion <- kable(roundedPValueList)
+
+kable_styling(tableVersion)
 
 
 ```
 
-Sentence 6 has the lowest p-value at 0.009. This means that the observed letter frequencies in that sentence deviate the most from what we would expect in typical English text. As a result, this means it has an unusual or non-typical letter distribution than what we'd expect written from a human, so this sentence has been watermarked by an LLM. 
+Sentence 6 has the lowest p-value at 0.009 with the highest Chi-Squared value. This means that the observed letter frequencies in that sentence deviate the most from what we would expect in typical English text. As a result, this means it has an unusual or non-typical letter distribution than what we'd expect written from a human, which means that this sentence has been watermarked by an LLM. 
