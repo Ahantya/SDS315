@@ -22,13 +22,14 @@ library(mosaic)
 
 ```{r echo=FALSE, fig.height=4, fig.width=4}
 
-iron = do(100000)*nflip(2021, 0.024)
+iron = do(100000)*nflip(2021, 0.024) #observing the amount of trades flagged out of 2021 trades if the baseline rate is expected to be only 2.4%
 
 ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
 
-pValue1 = sum(iron >= 70) / 100000
+pValue1 = sum(iron >= 70) / 100000 # 
 
-# 70 is what is observed 
+# 70 is what is observed
+# how common is it to find 70 flagged trades in 100,000 simulations? if it's not common, there is suspicious activity 
 
 ```
 
