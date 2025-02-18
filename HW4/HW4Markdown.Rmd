@@ -29,7 +29,7 @@ ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
 pValue1 = sum(iron >= 70) / 100000 # 
 
 # 70 is what is observed
-# how common is it to find 70 flagged trades in 100,000 simulations? if it's not common, there is suspicious activity 
+# how common is it to find 70 flagged trades? we do this by simulating 100,000 times to see if it is common or not. if it's not common, there is suspicious activity 
 
 ```
 
