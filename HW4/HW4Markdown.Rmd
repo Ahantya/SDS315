@@ -45,11 +45,11 @@ The p-value is approximately 0.0019, which means that, there is only a 0.19% pro
 
 ```{r echo=FALSE}
 
-gourmet = do(100000) * nflip(50, 0.03) #50 bc we are dealing with gourmet bites
+gourmet = do(100000) * nflip(50, 0.03) #50 bc we are dealing with inspections specifically for gourmet bites
 
 ggplot(gourmet) + geom_histogram(aes(x=nflip), binwidth=1)
 
-pValue = sum(gourmet >= 8) / 100000 # 8 bc we want to see if the observed number is happening at a higher rate than it should with chance
+pValue = sum(gourmet >= 8) / 100000 # 8 (observed) bc we want to see if the observed number is happening at a higher rate than it should with chance
 
 pValue2 = format(pValue, scientific = FALSE)
 
