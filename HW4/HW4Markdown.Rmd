@@ -87,9 +87,19 @@ chiSim = do(100000)*{
   c(chi = this_chi) # return a vector with the chi-squared value
 }
 
+chiSim_df <- as.data.frame(chiSim)
+
+ggplot(chiSim_df, aes(x = chi)) +
+  geom_histogram(bins = 30, color = "black") +
+  ggtitle("Histogram of Simulated Chi-Squared Values") +
+  xlab("Chi-Squared Value") +
+  ylab("Frequency") +
+  theme_minimal()
+
 pValue3 = sum(chiSim$chi >= chiObserved) / 100000
 
 ```
+This histogram displays the distribution of the chi-squared values from the 100,000 simulated jury selections under the assumption that the jury selection process is unbiased.
 
 In this question, we are testing whether the jury selection process is biased. Specifically, the null hypothesis being tested is that the distribution of jurors across different groups follows the same expected distribution, meaning that there is no bias in the jury selection process.
 
