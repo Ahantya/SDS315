@@ -24,7 +24,9 @@ library(mosaic)
 
 iron = do(100000)*nflip(2021, 0.024) #observing the amount of trades flagged out of 2021 trades if the baseline rate is expected to be only 2.4%
 
-ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1)
+ggplot(iron) + geom_histogram(aes(x=nflip), binwidth=1) + ggtitle("Sims for. Flagged Trades for Iron Bank") +
+  xlab("Number of Flagged Trades") +
+  ylab("Frequency")
 
 pValue1 = sum(iron >= 70) / 100000 # 
 
@@ -47,7 +49,9 @@ The p-value is approximately 0.0019, which means that, there is only a 0.19% pro
 
 gourmet = do(100000) * nflip(50, 0.03) #50 bc we are dealing with inspections specifically for gourmet bites
 
-ggplot(gourmet) + geom_histogram(aes(x=nflip), binwidth=1)
+ggplot(gourmet) + geom_histogram(aes(x=nflip), binwidth=1) + ggtitle("Simulated Health Code Violations for Gourmet Bites") +
+  xlab("Number of Violations") +
+  ylab("Frequency")
 
 pValue = sum(gourmet >= 8) / 100000 # 8 (observed) bc we want to see if the observed number is happening at a higher rate than it should with chance
 
@@ -91,7 +95,7 @@ chiSim_df <- as.data.frame(chiSim)
 
 ggplot(chiSim_df, aes(x = chi)) +
   geom_histogram(bins = 30, color = "black") +
-  ggtitle("Histogram of Simulated Chi-Squared Values") +
+  ggtitle("Simulated Chi-Squared Values for Simulated Jurors") +
   xlab("Chi-Squared Value") +
   ylab("Frequency") +
   theme_minimal()
@@ -146,7 +150,9 @@ for (i in 1:length(sentences)) {
 
 chiSquaredDF <- data.frame(chiSquared = chiSquaredValues)
 ggplot(chiSquaredDF) + 
-  geom_histogram(bins = 30, aes(x=chiSquared)) + 
+  geom_histogram(bins = 30, aes(x=chiSquared)) + ggtitle("Simulated Chi-Squared Values from Brown Corpus Sentences") +
+  xlab("Chi-Squared Value") +
+  ylab("Frequency") + 
   scale_x_continuous(labels = scales::comma)
 
 ```
