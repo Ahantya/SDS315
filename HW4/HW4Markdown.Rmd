@@ -221,4 +221,4 @@ kable_styling(tableVersion)
 
 ```
 
-Sentence 6 has the lowest p-value at 0.009 with the highest Chi-Squared value. This means that the observed letter frequencies in that sentence deviate the most from what we would expect in typical English text. As a result, this means it has an unusual or non-typical letter distribution than what we'd expect written from a human, which means that this sentence has been watermarked by an LLM.
+Sentence 6 has the lowest p-value at 0.009 with the highest Chi-Squared value at 96.453. This means that the observed letter frequencies in that sentence deviate the most from what we would expect in typical English text. As a result, this means it has an unusual or non-typical letter distribution than what we'd expect written from a human, which means that this sentence has been watermarked by an LLM.
