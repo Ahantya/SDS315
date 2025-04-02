@@ -1,0 +1,40 @@
+---
+title: "HW7Markdown"
+author: "Ahantya Sharma"
+date: "2025-04-02"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(tidyverse)
+library(kableExtra)
+library(mosaic)
+armfold <- read.csv('armfold.csv')
+```
+
+
+```{r echo=FALSE}
+maleCount <- sum(armfold$Sex == "Male") # number of males in report
+femaleCount <- sum(armfold$Sex == "Female") # number of females in your report 
+proportionMale <- mean(armfold$LonR_fold[armfold$Sex == "Male"] == 1) # sample proportion of left-folded males
+proportionFemale <- mean(armfold$LonR_fold[armfold$Sex == "Female"] == 1) # sample proportion of left-folded females
+
+
+```
+
+A. 
+- There are 106 male students and 111 female students.
+- The sample proportion of males who folded their left arm on top is 0.4717.
+- The sample proportion of females who folded their left arm on top is 0.4234. 
+
+B.
+- The observed difference in proportions between the two groups is about 0.0483 (males minus females).
+
+C.
+
+
+
