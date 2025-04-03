@@ -171,6 +171,7 @@ kable(woop2Voted, digits = 4, caption = "By Voting in 1998")
 
 
 ```{r echo=FALSE}
+#idk about this
 propTestMajorParty <- prop.test(table(turnout$MAJORPTY, turnout$GOTV_call))
 confint(propTestMajorParty)
 
@@ -190,6 +191,7 @@ Third Confidence Interval (1996 Voting): This estimates the difference in 1996 v
 
 
 ```{r echo=FALSE}
+# idk about this
 propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
 confint(propTestMajorParty1998)
 
@@ -275,6 +277,7 @@ Now, the matched data set is balanced and these confounders will no longer affec
 
 ```{r echo=FALSE, warning=FALSE}
 
+# idk about this at all
 
 #onfidence interval for the difference in proportions of voted1996 (post-matching)
 propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
