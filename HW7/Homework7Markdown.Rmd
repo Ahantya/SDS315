@@ -5,7 +5,7 @@ date: "2025-04-02"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(knitr)
@@ -13,28 +13,298 @@ library(scales)
 library(tidyverse)
 library(kableExtra)
 library(mosaic)
+library(MatchIt)
 armfold <- read.csv('armfold.csv')
+turnout <- read.csv("turnout.csv")
 ```
 
+# Problem 1 - Arm Folding
 
-```{r echo=FALSE}
+
+```{r echo=FALSE, warning = FALSE}
 maleCount <- sum(armfold$Sex == "Male") # number of males in report
 femaleCount <- sum(armfold$Sex == "Female") # number of females in your report 
 proportionMale <- mean(armfold$LonR_fold[armfold$Sex == "Male"] == 1) # sample proportion of left-folded males
 proportionFemale <- mean(armfold$LonR_fold[armfold$Sex == "Female"] == 1) # sample proportion of left-folded females
 
+diffProps <- prop.test(LonR_fold ~ Sex, data=armfold)
+
 
 ```
 
-A. 
+
+### A. 
 - There are 106 male students and 111 female students.
 - The sample proportion of males who folded their left arm on top is 0.4717.
 - The sample proportion of females who folded their left arm on top is 0.4234. 
 
-B.
+
+### B.
 - The observed difference in proportions between the two groups is about 0.0483 (males minus females).
 
-C.
 
+
+### C.
+
+```{r echo=TRUE, warning=FALSE}
+
+
+p1 = proportionMale
+p2 = proportionFemale
+
+minusP1 = 1 - proportionMale
+minusP2 = 1 - proportionFemale
+zValue = 1.96
+
+handSE = handSE <- sqrt((p1 * (minusP1) / maleCount) + (p2 * (minusP2) / femaleCount))
+marginError <- zValue * handSE 
+lowerBound <- (p1 - p2) - marginError
+upperBound <- (p1 - p2) + marginError
+
+confint(diffProps, level=0.95)
+
+```
+
+- The formula for the **standard error** for the difference in proportions is 
+$\sqrt{\frac{\hat{p}_1 (1 - \hat{p}_1)}{N_1} + \frac{\hat{p}_2 (1 - \hat{p}_2)}{N_2}}$. 
+
+- For this formula, I plugged in \( \hat{p}_1 \) as `r p1`,  \( \hat{p}_2 \) as `r p2`,  \( N_1 \) as `r maleCount`, and \( N_2 \) as `r femaleCount`.  
+
+- For the 95% confidence interval, I used 1.96 as my z* value because the true difference (in difference of proportions) is within 1.96 standard deviations from the mean in a normal distribution. 
+
+
+### D. 
+If we were to repeatedly sample students from this population, then we would expect that the true difference in proportions between male students and female students who fold their left arm on top would be captured within the interval (`r round(lowerBound, 4)`, `r round(upperBound, 4)`) **95% of the time**.
+
+
+### E. 
+The standard error above represents the expected amount of varying in the sample proportion differences between males and females who fold their left arm on top after repeatedly sampling (or bootstrap) students from this population. 
+
+
+### F. 
+The term sampling distribution refers to the varying values or the distribution of the difference in sample proportions between male students and female students who fold their left arm on top when you repeatedly random sample students from this population. The sample proportions, and as a result, their differences will be changing from sample to sample as each sample has different students in the sample, but the the true population proportion difference will remain the same (even if we don't know the value).
+
+
+### G. 
+The mathematical result or theorem justifies using a normal distribution to approximate the sampling distribution of the difference in sample proportions is called the **Central Limit Theorem**. It states that when sample sizes are large enough, any sampling distribution of a sample proportion or sample mean has a normal distribution, disregarding the original shape of the population distribution. In this case, since the sample sizes are both over 30 from the female sample size and the male sample size, we can assume that both sample sizes are sufficiently large enough to assume a normal distribution for the sampling distrubution. 
+
+
+### H. 
+If my 95% confidence interval for the difference in proportions was [-0.01, 0.30], it would make sense for someone to say that "there's no sex difference in arm folding" as the confidence interval contains a difference of zero, meaning there is a chance of no true proportion difference between males and females in arm-folding which we cannot rule out. 
+
+
+### I. 
+If you repeated this experiment many times with different random samples of university students, the confidence interval would be different across samples because each random sample has different students, which would lead to slight changes in the sample proportions for males and females who fold their left arm on top. As a result, since the confidence interval depends on the sample data, the variability in sample proportions would be captured and seen as the change in the confidence interval. 
+
+\newpage
+
+# Problem 2 - Get out the vote 
+
+
+### Part A
+
+```{r echo=FALSE, warning=FALSE}
+
+propGOTV1998 <- sum(turnout$voted1998[turnout$GOTV_call == 1]) / sum(turnout$GOTV_call == 1)
+
+propNOTGOTV1998 <- mean(turnout$voted1998[turnout$GOTV_call == 0]) # same thing as above.
+
+DiffGotv <- prop.test(voted1998 ~ GOTV_call, data = turnout)
+
+confint(DiffGotv, level = 0.95)
+
+# lower and upper is range of differences between propGOTV1998 and propNOTGOTV1998
+
+
+```
+
+The proportion of those receiving a GOTV call who voted in 1998 was `r round(propGOTV1998, 4)` and the proportion of those not receiving a GOTV call who voted in 1998 was `r round(propNOTGOTV1998, 4)`. 
+
+### Part B
+
+```{r echo=FALSE, warning=FALSE}
+
+
+meanAgeReceived <- mean(turnout$AGE[turnout$GOTV_call == 1])
+meanAgeNotReceived <- mean(turnout$AGE[turnout$GOTV_call == 0])
+
+majorPartyProportionReceived <- mean(turnout$MAJORPTY[turnout$GOTV_call == 1]) # we can use mean and it'll calculate proportion for majority == 1 since its a binary variable
+majorPartyProportionNotReceived <- mean(turnout$MAJORPTY[turnout$GOTV_call == 0])
+
+voted1996ProportionReceived <- mean(turnout$voted1996[turnout$GOTV_call == 1])
+voted1996ProportionNotReceived <- mean(turnout$voted1996[turnout$GOTV_call == 0])
+
+woop <- data.frame(
+  Variable = c("Mean Age", "Major Party Membership", "1996 Voting Proportion"),
+  "Received GOTV Call" = c(meanAgeReceived, majorPartyProportionReceived, voted1996ProportionReceived),
+  "Did Not Receive GOTV Call" = c(meanAgeNotReceived, majorPartyProportionNotReceived, voted1996ProportionNotReceived)
+)
+
+colnames(woop) <- gsub("\\.", " ", colnames(woop)) # remove dots 
+
+kable(woop, digits = 4, caption = "By GOTV Call")
+
+
+meanAgeVoted <- mean(turnout$AGE[turnout$voted1998 == 1])  
+meanAgeNotVoted <- mean(turnout$AGE[turnout$voted1998 == 0]) 
+
+majorPartyProportionVoted <- mean(turnout$MAJORPTY[turnout$voted1998 == 1]) 
+majorPartyProportionNotVoted <- mean(turnout$MAJORPTY[turnout$voted1998 == 0])  
+
+voted1996ProportionVoted <- mean(turnout$voted1996[turnout$voted1998 == 1]) 
+voted1996ProportionNotVoted <- mean(turnout$voted1996[turnout$voted1998 == 0])
+
+woop2Voted <- data.frame(
+  Variable = c("Mean Age", "Major Party Membership", "1996 Voting Proportion"),
+  "Voted in 1998" = c(meanAgeVoted, majorPartyProportionVoted, voted1996ProportionVoted),
+  "Did Not Vote in 1998" = c(meanAgeNotVoted, majorPartyProportionNotVoted, voted1996ProportionNotVoted)
+)
+
+colnames(woop2Voted) <- gsub("\\.", " ", colnames(woop2Voted))  # remove dots from column names again
+
+kable(woop2Voted, digits = 4, caption = "By Voting in 1998")
+```
+
+
+```{r echo=FALSE}
+propTestMajorParty <- prop.test(table(turnout$MAJORPTY, turnout$GOTV_call))
+confint(propTestMajorParty)
+
+tTestAge <- t.test(turnout$AGE[turnout$GOTV_call == 1], turnout$AGE[turnout$GOTV_call == 0])
+tTestAge$conf.int
+
+propTest1996 <- prop.test(table(turnout$voted1996, turnout$GOTV_call))
+confint(propTest1996)
+
+```
+
+First Confidence Interval (Major Party Membership): This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, there is a significant relation between party membership and the chance of receiving a GOTV call.
+
+Second Confidence Interval (Age): This estimates the difference in mean age between GOTV call recipients and non-recipients. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning older individuals may have been more or less likely to receive a call.
+
+Third Confidence Interval (1996 Voting): This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, it suggests that past voting behavior (in 1996) is significantly related to the chance of receiving a GOTV call.
+
+
+```{r echo=FALSE}
+propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
+confint(propTestMajorParty1998)
+
+tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
+tTestAge1998$conf.int
+
+propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
+confint(propTest1996_1998)
+
+```
+
+
+First Confidence Interval (Major Party Membership and 1998 Voting): This estimates the difference in major party membership proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that major party membership is significantly associated with the chance of voting in 1998.
+
+Second Confidence Interval (Age and 1998 Voting): This estimates the difference in mean age between those who voted in 1998 and those who did not. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning that age affects whether someone voted in 1998.
+
+Third Confidence Interval (1996 Voting and 1998 Voting): This estimates the difference in 1996 voting proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that voting behavior in 1996 is signficiant in predicitng whether someone would vote in 1998.
+
+Also, from Table 1, we see that older individuals, major party members, and past voters were more likely to be targeted for GOTV calls. From table 2, these same characteristics also made someone more likely to vote in 1998 (regardless of the GOTV calls). For example, we can see that the majority of people who had voted in 1998 also voted in 1996 and the majority of people who had received a GOTV called also voted in 1996, which shows the con-founder variable of voting in 1996. 
+
+This means that major party membership, age, and 1996 voting behavior are confounder variables that prevent my result in Part A from representing the true causal effect of the GOTV call on the likelihood that a person voted in 1998. 
+
+
+## Part C
+
+```{r echo=FALSE}
+
+matchingModel <- matchit(GOTV_call ~ voted1996 + AGE + MAJORPTY, data = turnout, method = "nearest", ratio = 5)
+
+matchedData <- match.data(matchingModel)
+
+
+propGOTVvoted1998Matched <- mean(matchedData$voted1998[matchedData$GOTV_call == 1])
+
+propNotGOTVvoted1998Matched <- mean(matchedData$voted1998[matchedData$GOTV_call == 0])
+
+
+# Summary statistics for confounders before matching
+
+cat("Mean of voted1996 for GOTV Call Recipients: ", mean(turnout$voted1996[turnout$GOTV_call == 1]), "\n")
+cat("Mean of voted1996 for Non-GOTV Call Recipients: ", mean(turnout$voted1996[turnout$GOTV_call == 0]), "\n")
+
+cat("Mean Age for GOTV Call Recipients: ", mean(turnout$AGE[turnout$GOTV_call == 1]), "\n")
+cat("Mean Age for Non-GOTV Call Recipients: ", mean(turnout$AGE[turnout$GOTV_call == 0]), "\n")
+
+cat("Mean Major Party Membership for GOTV Call Recipients: ", mean(turnout$MAJORPTY[turnout$GOTV_call == 1]), "\n")
+cat("Mean Major Party Membership for Non-GOTV Call Recipients: ", mean(turnout$MAJORPTY[turnout$GOTV_call == 0]), "\n")
+
+
+```
+
+Before performing matching, here are the mean values for the three confounders (voted1996, AGE, and MAJORPTY) for both the treatment group (those who received a GOTV call) and the control group (those who did not receive a GOTV call).
+
+The first two values are about voted1996, with the treatment mean followed by the control mean. 
+The second two values are about age, with the treatment mean followed by the control mean.
+The third two values are about MAJORPTY, with the treatment mean followed by the control mean. 
+
+```{r echo=FALSE, warning=FALSE}
+
+# mean statistics for confounders after matching
+
+cat("Mean of voted1996 for GOTV Call Recipients (Matched Data): ", mean(matchedData$voted1996[matchedData$GOTV_call == 1]), "\n")
+cat("Mean of voted1996 for Non-GOTV Call Recipients (Matched Data): ", mean(matchedData$voted1996[matchedData$GOTV_call == 0]), "\n")
+
+cat("Mean Age for GOTV Call Recipients (Matched Data): ", mean(matchedData$AGE[matchedData$GOTV_call == 1]), "\n")
+cat("Mean Age for Non-GOTV Call Recipients (Matched Data): ", mean(matchedData$AGE[matchedData$GOTV_call == 0]), "\n")
+
+cat("Mean Major Party Membership for GOTV Call Recipients (Matched Data): ", mean(matchedData$MAJORPTY[matchedData$GOTV_call == 1]), "\n")
+cat("Mean Major Party Membership for Non-GOTV Call Recipients (Matched Data): ", mean(matchedData$MAJORPTY[matchedData$GOTV_call == 0]), "\n")
+
+```
+
+After performing matching, here are the mean values for the three confounders (voted1996, AGE, and MAJORPTY) for both the treatment group (those who received a GOTV call) and the control group (those who did not receive a GOTV call).
+
+
+The first two values are about voted1996, with the treatment mean followed by the control mean. 
+The second two values are about age, with the treatment mean followed by the control mean.
+The third two values are about MAJORPTY, with the treatment mean followed by the control mean. 
+
+As the values are much more similar now, this suggests that the matching process has successfully balanced the confounders between the two groups. This implies that the differences between the treatment and control groups in terms of voted1996, AGE, and MAJORPTY are now minimized, and the groups are comparable with respect to these variables.
+
+Now, the matched data set is balanced and these confounders will no longer affect the relationship between the GOTV call and the likelihood of voting in 1998 (in this dataset). 
+
+```{r echo=FALSE}
+
+
+# Confidence interval for the difference in proportions of voted1996 (post-matching)
+propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
+confint(propTestVoted1996Matched)
+
+
+# Confidence interval for the difference in AGE means (post-matching)
+tTestAgeMatched <- t.test(matchedData$AGE[matchedData$GOTV_call == 1], matchedData$AGE[matchedData$GOTV_call == 0])
+tTestAgeMatched$conf.int
+
+# Confidence interval for the difference in MAJORPTY proportions (post-matching)
+propTestMajorPTYMatched <- prop.test(table(matchedData$MAJORPTY, matchedData$GOTV_call))
+confint(propTestMajorPTYMatched, level=0.95)
+```
+
+
+First Confidence Interval (1996 Voting and GOTV Call):
+This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval includes 0, it suggests that the difference in voting behavior from 1996 between the two groups is not statistically significant, indicating that 1996 voting behavior may not strongly influence whether someone received a GOTV call.
+
+Second Confidence Interval (Age and GOTV Call):
+This estimates the difference in mean age between those who received a GOTV call and those who did not. Since the confidence interval contains 0, it suggests that age is not significantly different between the two groups post-matching, implying that age is not a key differentiator in receiving a GOTV call once matching is applied.
+
+Third Confidence Interval (Major Party Membership and GOTV Call):
+This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. The confidence interval containing 0 indicates that the difference in major party membership between the two groups is not statistically significant, suggesting that being a member of a major party is not a strong factor in determining whether a person received a GOTV call after matching.
+
+
+This further shows that after applying the matching procedure, the three confounders (1996 voting, age, and major party membership) do not significantly differ between those who received a GOTV call and those who did not, so they now won't affect the new 95% confidence interval. 
+
+
+```{r echo=FALSE, warning=FALSE}
+propTestMatched <- prop.test(table(matchedData$voted1998, matchedData$GOTV_call))
+confint(propTestMatched, level=0.95)
+```
+
+As the new 95% confidence interval does not contain the value 0 within its interval, this means the null hypothesis can be rejected (GOTV call has no effect on the likelihood of voting in 1998). This means that receiving a GOTV call had a statistically significant effect on voter turnout in 1998. Since the difference in proportions is positive, we can conclude that individuals who received a GOTV call were more likely to vote in 1998 compared to those who did not receive a GOTV call.
 
 
