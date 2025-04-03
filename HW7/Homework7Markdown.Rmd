@@ -7,7 +7,7 @@ output: pdf_document
 
 ### UT EID: as236366
 
-### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW7/HW7Markdown.Rmd>
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW7/Homework7Markdown.Rmd>
 
 ```{r setup, include=FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -172,43 +172,47 @@ kable(woop2Voted, digits = 4, caption = "By Voting in 1998")
 
 ```{r echo=FALSE}
 #idk about this
-propTestMajorParty <- prop.test(table(turnout$MAJORPTY, turnout$GOTV_call))
-confint(propTestMajorParty)
+#propTestMajorParty <- prop.test(table(turnout$MAJORPTY, turnout$GOTV_call))
+#confint(propTestMajorParty)
 
-tTestAge <- t.test(turnout$AGE[turnout$GOTV_call == 1], turnout$AGE[turnout$GOTV_call == 0])
-tTestAge$conf.int
+#tTestAge <- t.test(turnout$AGE[turnout$GOTV_call == 1], turnout$AGE[turnout$GOTV_call == 0])
+#tTestAge$conf.int
 
-propTest1996 <- prop.test(table(turnout$voted1996, turnout$GOTV_call))
-confint(propTest1996)
+#propTest1996 <- prop.test(table(turnout$voted1996, turnout$GOTV_call))
+#confint(propTest1996)
+
+
+#First Confidence Interval (Major Party Membership): This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, there is a significant relation between party membership and the chance of receiving a GOTV call.
+
+#Second Confidence Interval (Age): This estimates the difference in mean age between GOTV call recipients and non-recipients. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning older individuals may have been more or less likely to receive a call.
+
+#Third Confidence Interval (1996 Voting): This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, it suggests that past voting behavior (in 1996) is significantly related to the chance of receiving a GOTV call.
 
 ```
 
-First Confidence Interval (Major Party Membership): This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, there is a significant relation between party membership and the chance of receiving a GOTV call.
-
-Second Confidence Interval (Age): This estimates the difference in mean age between GOTV call recipients and non-recipients. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning older individuals may have been more or less likely to receive a call.
-
-Third Confidence Interval (1996 Voting): This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval does not contain 0, it suggests that past voting behavior (in 1996) is significantly related to the chance of receiving a GOTV call.
 
 
 ```{r echo=FALSE}
 # idk about this
-propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
-confint(propTestMajorParty1998)
+#propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
+#confint(propTestMajorParty1998)
 
-tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
-tTestAge1998$conf.int
+#tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
+#tTestAge1998$conf.int
 
-propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
-confint(propTest1996_1998)
+#propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
+#confint(propTest1996_1998)
+
+
+#First Confidence Interval (Major Party Membership and 1998 Voting): This estimates the difference in major party membership proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that major party membership is significantly associated with the chance of voting in 1998.
+
+#Second Confidence Interval (Age and 1998 Voting): This estimates the difference in mean age between those who voted in 1998 and those who did not. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning that age affects whether someone voted in 1998.
+
+#Third Confidence Interval (1996 Voting and 1998 Voting): This estimates the difference in 1996 voting proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that voting behavior in 1996 is signficiant in predicitng whether someone would vote in 1998.
 
 ```
 
 
-First Confidence Interval (Major Party Membership and 1998 Voting): This estimates the difference in major party membership proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that major party membership is significantly associated with the chance of voting in 1998.
-
-Second Confidence Interval (Age and 1998 Voting): This estimates the difference in mean age between those who voted in 1998 and those who did not. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning that age affects whether someone voted in 1998.
-
-Third Confidence Interval (1996 Voting and 1998 Voting): This estimates the difference in 1996 voting proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that voting behavior in 1996 is signficiant in predicitng whether someone would vote in 1998.
 
 Also, from Table 1, we see that older individuals, major party members, and past voters were more likely to be targeted for GOTV calls. From table 2, these same characteristics also made someone more likely to vote in 1998 (regardless of the GOTV calls). For example, we can see that the majority of people who had voted in 1998 also voted in 1996 and the majority of people who had received a GOTV called also voted in 1996, which shows the con-founder variable of voting in 1996. 
 
@@ -280,31 +284,32 @@ Now, the matched data set is balanced and these confounders will no longer affec
 # idk about this at all
 
 #onfidence interval for the difference in proportions of voted1996 (post-matching)
-propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
-confint(propTestVoted1996Matched)
+#propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
+#confint(propTestVoted1996Matched)
 
 
 #confidence interval for the difference in AGE means (post-matching)
-tTestAgeMatched <- t.test(matchedData$AGE[matchedData$GOTV_call == 1], matchedData$AGE[matchedData$GOTV_call == 0])
-tTestAgeMatched$conf.int
+#tTestAgeMatched <- t.test(matchedData$AGE[matchedData$GOTV_call == 1], matchedData$AGE[matchedData$GOTV_call == 0])
+#tTestAgeMatched$conf.int
 
 #Confidence interval for the difference in MAJORPTY proportions (post-matching)
-propTestMajorPTYMatched <- prop.test(table(matchedData$MAJORPTY, matchedData$GOTV_call))
-confint(propTestMajorPTYMatched, level=0.95)
+#propTestMajorPTYMatched <- prop.test(table(matchedData$MAJORPTY, matchedData$GOTV_call))
+#confint(propTestMajorPTYMatched, level=0.95)
+
+
+#First Confidence Interval (1996 Voting and GOTV Call):
+#This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval includes 0, it suggests that the difference in voting behavior from 1996 between the two groups is not statistically significant, indicating that 1996 voting behavior may not strongly influence whether someone received a GOTV call.
+
+#Second Confidence Interval (Age and GOTV Call):
+#This estimates the difference in mean age between those who received a GOTV call and those who did not. Since the confidence interval contains 0, it suggests that age is not significantly different between the two groups post-matching, implying that age is not a key differentiator in receiving a GOTV call once matching is applied.
+
+#Third Confidence Interval (Major Party Membership and GOTV Call):
+#This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. The confidence interval containing 0 indicates that the difference in major party membership between the two groups is not statistically significant, suggesting that being a member of a major party is not a strong factor in determining whether a person received a GOTV call after matching.
+
+
+#This further shows that after applying the matching procedure, the three confounders (1996 voting, age, and major party membership) do not significantly differ between those who received a GOTV call and those who did not, so they now won't affect the new 95% confidence interval.
 ```
 
-
-First Confidence Interval (1996 Voting and GOTV Call):
-This estimates the difference in 1996 voting proportions between those who received a GOTV call and those who did not. Since the confidence interval includes 0, it suggests that the difference in voting behavior from 1996 between the two groups is not statistically significant, indicating that 1996 voting behavior may not strongly influence whether someone received a GOTV call.
-
-Second Confidence Interval (Age and GOTV Call):
-This estimates the difference in mean age between those who received a GOTV call and those who did not. Since the confidence interval contains 0, it suggests that age is not significantly different between the two groups post-matching, implying that age is not a key differentiator in receiving a GOTV call once matching is applied.
-
-Third Confidence Interval (Major Party Membership and GOTV Call):
-This estimates the difference in major party membership proportions between those who received a GOTV call and those who did not. The confidence interval containing 0 indicates that the difference in major party membership between the two groups is not statistically significant, suggesting that being a member of a major party is not a strong factor in determining whether a person received a GOTV call after matching.
-
-
-This further shows that after applying the matching procedure, the three confounders (1996 voting, age, and major party membership) do not significantly differ between those who received a GOTV call and those who did not, so they now won't affect the new 95% confidence interval. 
 
 
 ```{r echo=FALSE, warning=FALSE}
