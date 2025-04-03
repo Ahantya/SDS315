@@ -273,7 +273,7 @@ As the values are much more similar now, this suggests that the matching process
 
 Now, the matched data set is balanced and these confounders will no longer affect the relationship between the GOTV call and the likelihood of voting in 1998 (in this dataset). 
 
-```{r echo=FALSE}
+```{r echo=FALSE, warning=FALSE}
 
 
 # Confidence interval for the difference in proportions of voted1996 (post-matching)
