@@ -227,7 +227,7 @@ propGOTVvoted1998Matched <- mean(matchedData$voted1998[matchedData$GOTV_call == 
 propNotGOTVvoted1998Matched <- mean(matchedData$voted1998[matchedData$GOTV_call == 0])
 
 
-# Summary statistics for confounders before matching
+#mean statistics for confounders before matching
 
 cat("Mean of voted1996 for GOTV Call Recipients: ", mean(turnout$voted1996[turnout$GOTV_call == 1]), "\n")
 cat("Mean of voted1996 for Non-GOTV Call Recipients: ", mean(turnout$voted1996[turnout$GOTV_call == 0]), "\n")
@@ -276,16 +276,16 @@ Now, the matched data set is balanced and these confounders will no longer affec
 ```{r echo=FALSE, warning=FALSE}
 
 
-# Confidence interval for the difference in proportions of voted1996 (post-matching)
+#onfidence interval for the difference in proportions of voted1996 (post-matching)
 propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
 confint(propTestVoted1996Matched)
 
 
-# Confidence interval for the difference in AGE means (post-matching)
+#confidence interval for the difference in AGE means (post-matching)
 tTestAgeMatched <- t.test(matchedData$AGE[matchedData$GOTV_call == 1], matchedData$AGE[matchedData$GOTV_call == 0])
 tTestAgeMatched$conf.int
 
-# Confidence interval for the difference in MAJORPTY proportions (post-matching)
+#Confidence interval for the difference in MAJORPTY proportions (post-matching)
 propTestMajorPTYMatched <- prop.test(table(matchedData$MAJORPTY, matchedData$GOTV_call))
 confint(propTestMajorPTYMatched, level=0.95)
 ```
