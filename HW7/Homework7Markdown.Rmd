@@ -72,13 +72,13 @@ confint(diffProps, level=0.95)
 - The formula for the **standard error** for the difference in proportions is 
 $\sqrt{\frac{\hat{p}_1 (1 - \hat{p}_1)}{N_1} + \frac{\hat{p}_2 (1 - \hat{p}_2)}{N_2}}$. 
 
-- For this formula, I plugged in \( \hat{p}_1 \) as `r p1`,  \( \hat{p}_2 \) as `r p2`,  \( N_1 \) as `r maleCount`, and \( N_2 \) as `r femaleCount`.  
+- For this formula, I plugged in \( \hat{p}_1 \) as `r p1`,  \( \hat{p}_2 \) as `r p2`,  \( N_1 \) as `r maleCount`, and \( N_2 \) as `r femaleCount`. So, the SE was sqrt((`r p1` * (`r minusP1`) / `r maleCount`) + (`r p2` * (`r minusP2`) / `r femaleCount`)), which got me `r handSE`. Then, I calculated the lower and upper bounds of the confidence interval by adding and subtracting the margin of error from the sample estimate, p1 - p2. The sample estimate was `r p1 - p2`, and the margin of error was `r marginError`. So, the lower bound was calculated (rounded to 4 digits) as `r round(lowerBound, 4)` and the upper bound was `r round(upperBound, 4)`. So, my confidence interval was (`r round(lowerBound, 4)`, `r round(upperBound, 4)`).  
 
 - For the 95% confidence interval, I used 1.96 as my z* value because the true difference (in difference of proportions) is within 1.96 standard deviations from the mean in a normal distribution. 
 
 
 ### D. 
-If we were to repeatedly sample students from this population, then we would expect that the true difference in proportions between male students and female students who fold their left arm on top would be captured within the interval (`r round(lowerBound, 4)`, `r round(upperBound, 4)`) **95% of the time**.
+If we were to repeatedly take random samples of male and female students and calculate the difference in proportions of those who fold their left arm on top, then we would expect that 95% of the resulting confidence intervals to contain the true difference in proportions between male and female students in the population who fold their left arm on top.
 
 
 ### E. 
@@ -197,25 +197,25 @@ This estimates the difference in 1996 voting proportions between those who recei
 
 
 ```{r echo=FALSE}
-# idk about this
-#propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
-#confint(propTestMajorParty1998)
 
-#tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
-#tTestAge1998$conf.int
+propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
+confint(propTestMajorParty1998)
 
-#propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
-#confint(propTest1996_1998)
+tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
+tTestAge1998$conf.int
+
+propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
+confint(propTest1996_1998)
 
 
-#First Confidence Interval (Major Party Membership and 1998 Voting): This estimates the difference in major party membership proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that major party membership is significantly associated with the chance of voting in 1998.
-
-#Second Confidence Interval (Age and 1998 Voting): This estimates the difference in mean age between those who voted in 1998 and those who did not. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning that age affects whether someone voted in 1998.
-
-#Third Confidence Interval (1996 Voting and 1998 Voting): This estimates the difference in 1996 voting proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that voting behavior in 1996 is signficiant in predicitng whether someone would vote in 1998.
 
 ```
 
+First Confidence Interval (Major Party Membership and 1998 Voting): This estimates the difference in major party membership proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that major party membership is significantly associated with the chance of voting in 1998.
+
+Second Confidence Interval (Age and 1998 Voting): This estimates the difference in mean age between those who voted in 1998 and those who did not. A confidence interval that does not include 0 indicates that age is significantly different between the two groups, meaning that age affects whether someone voted in 1998.
+
+Third Confidence Interval (1996 Voting and 1998 Voting): This estimates the difference in 1996 voting proportions between those who voted in 1998 and those who did not. Since the confidence interval does not contain 0, it suggests that voting behavior in 1996 is signficiant in predicitng whether someone would vote in 1998.
 
 
 Also, from Table 1, we see that older individuals, major party members, and past voters were more likely to be targeted for GOTV calls. From table 2, these same characteristics also made someone more likely to vote in 1998 (regardless of the GOTV calls). For example, we can see that the majority of people who had voted in 1998 also voted in 1996 and the majority of people who had received a GOTV called also voted in 1996, which shows the con-founder variable of voting in 1996. 
