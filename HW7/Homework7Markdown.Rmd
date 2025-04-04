@@ -82,7 +82,7 @@ If we were to repeatedly take random samples of male and female students and cal
 
 
 ### E. 
-The standard error above represents the expected amount of varying in the sample proportion differences between males and females who fold their left arm on top after repeatedly sampling (or bootstrap) students from this population. 
+The standard error (`r round(handSE, 4)`) above represents the expected amount of varying in the sample proportion differences between males and females who fold their left arm on top after repeatedly sampling (or bootstrap) students from this population. 
 
 
 ### F. 
