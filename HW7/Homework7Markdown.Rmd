@@ -94,7 +94,7 @@ The mathematical result or theorem justifies using a normal distribution to appr
 
 
 ### H. 
-If my 95% confidence interval for the difference in proportions was [-0.01, 0.30], it would make sense for someone to say that "there's no sex difference in arm folding" as the confidence interval contains a difference of zero, meaning there is a chance of no true proportion difference between males and females in arm-folding which we cannot rule out. 
+If my 95% confidence interval for the difference in proportions was [-0.01, 0.30], it would make sense for someone to say that "there's no sex difference in arm folding" (for university students) as the confidence interval contains a difference of zero, meaning there is a chance of no true proportion difference between males and females in arm-folding which we cannot rule out. 
 
 
 ### I. 
@@ -317,7 +317,7 @@ This further shows that after applying the matching procedure, the three confoun
 
 
 ```{r echo=FALSE, warning=FALSE}
-propTestMatched <- prop.test(table(matchedData$voted1998, matchedData$GOTV_call))
+propTestMatched <- prop.test(voted1998 ~ GOTV_call, data = matchedData)
 confint(propTestMatched, level=0.95)
 ```
 
