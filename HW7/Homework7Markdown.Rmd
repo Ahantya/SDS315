@@ -317,11 +317,11 @@ This further shows that after applying the matching procedure, the three confoun
 
 ```{r echo=FALSE, warning=FALSE}
 
-diffprop(MAJORPTY ~ GOTV_call, data = matchedData)
+diffprop(GOTV_call ~ MAJORPTY, data = matchedData)
 
 diffmean(AGE ~ GOTV_call, data = matchedData) # further evidence
 
-diffprop(voted1996 ~ GOTV_call, data = matchedData)
+diffprop(GOTV_call ~ voted1996 , data = matchedData)
 
 
 ```
