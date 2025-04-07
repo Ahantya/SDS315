@@ -326,7 +326,7 @@ diffprop(GOTV_call ~ voted1996 , data = matchedData)
 
 ```
 
-Lastly, you can see the difference in proportions (difference in mean for age) between the control and treatment groups is close to 0 across the 3 confounder variables, suggesting that the matching was successful in balancing them (the treatment and control groups).
+Lastly, you can see the difference in proportions (difference in mean for age) between the control and treatment groups is close to 0 or is 0 across the 3 confounder variables and GOTV_call (specicially, the first diffprop is for MAJORPTY, the diffmean is for AGE, and the last diffprop is for voted1996), suggesting that the matching was successful in balancing them (the treatment and control groups).
 
 ```{r echo=FALSE, warning=FALSE}
 propTestMatched <- prop.test(voted1998 ~ GOTV_call, data = matchedData)
