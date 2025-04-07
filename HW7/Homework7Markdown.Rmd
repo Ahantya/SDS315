@@ -175,7 +175,7 @@ kable(woop2Voted, digits = 4, caption = "By Voting in 1998")
 propTestMajorParty <- prop.test(MAJORPTY ~ GOTV_call, data = turnout)
 confint(propTestMajorParty)
 
-tTestAge <- t.test(turnout$AGE[turnout$GOTV_call == 1], turnout$AGE[turnout$GOTV_call == 0])
+tTestAge <- t.test(AGE ~ GOTV_call, data = turnout)
 tTestAge$conf.int
 
 propTest1996 <- prop.test(voted1996 ~ GOTV_call, data=turnout)
@@ -201,7 +201,7 @@ This estimates the difference in 1996 voting proportions between those who recei
 propTestMajorParty1998 <- prop.test(MAJORPTY ~ voted1998, data = turnout)
 confint(propTestMajorParty1998)
 
-tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
+tTestAge1998 <- t.test(AGE ~ voted1998, data = turnout)
 tTestAge1998$conf.int
 
 propTest1996_1998 <- prop.test(voted1996 ~ voted1998, data = turnout)
@@ -288,16 +288,16 @@ Now, the matched data set is balanced and these confounders will no longer affec
 # idk about this at all
 
 #onfidence interval for the difference in proportions of voted1996 (post-matching)
-propTestVoted1996Matched <- prop.test(table(matchedData$voted1996, matchedData$GOTV_call))
+propTestVoted1996Matched <- prop.test(voted1996 ~ GOTV_call, data=matchedData)
 confint(propTestVoted1996Matched)
 
 
 #confidence interval for the difference in AGE means (post-matching)
-tTestAgeMatched <- t.test(matchedData$AGE[matchedData$GOTV_call == 1], matchedData$AGE[matchedData$GOTV_call == 0])
+tTestAgeMatched <- t.test(AGE ~ GOTV_call, data = matchedData)
 tTestAgeMatched$conf.int
 
 #Confidence interval for the difference in MAJORPTY proportions (post-matching)
-propTestMajorPTYMatched <- prop.test(table(matchedData$MAJORPTY, matchedData$GOTV_call))
+propTestMajorPTYMatched <- prop.test(MAJORPTY ~ GOTV_call, data = matchedData)
 confint(propTestMajorPTYMatched, level=0.95)
 
 ```
@@ -315,6 +315,18 @@ This estimates the difference in major party membership proportions between thos
 
 This further shows that after applying the matching procedure, the three confounders (1996 voting, age, and major party membership) do not significantly differ between those who received a GOTV call and those who did not, so they now won't affect the new 95% confidence interval.
 
+```{r echo=FALSE, warning=FALSE}
+
+diffprop(MAJORPTY ~ GOTV_call, data = matchedData)
+
+diffmean(AGE ~ GOTV_call, data = matchedData) # further evidence
+
+diffprop(voted1996 ~ GOTV_call, data = matchedData)
+
+
+```
+
+Lastly, you can see the difference in proportions (difference in mean for age) between the control and treatment groups is close to 0 across the 3 confounder variables, suggesting that the matching was successful in balancing them (the treatment and control groups).
 
 ```{r echo=FALSE, warning=FALSE}
 propTestMatched <- prop.test(voted1998 ~ GOTV_call, data = matchedData)
