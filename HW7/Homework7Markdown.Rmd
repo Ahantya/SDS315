@@ -172,13 +172,13 @@ kable(woop2Voted, digits = 4, caption = "By Voting in 1998")
 
 ```{r echo=FALSE}
 #idk about this
-propTestMajorParty <- prop.test(table(turnout$MAJORPTY, turnout$GOTV_call))
+propTestMajorParty <- prop.test(MAJORPTY ~ GOTV_call, data = turnout)
 confint(propTestMajorParty)
 
 tTestAge <- t.test(turnout$AGE[turnout$GOTV_call == 1], turnout$AGE[turnout$GOTV_call == 0])
 tTestAge$conf.int
 
-propTest1996 <- prop.test(table(turnout$voted1996, turnout$GOTV_call))
+propTest1996 <- prop.test(voted1996 ~ GOTV_call, data=turnout)
 confint(propTest1996)
 
 
@@ -198,13 +198,13 @@ This estimates the difference in 1996 voting proportions between those who recei
 
 ```{r echo=FALSE}
 
-propTestMajorParty1998 <- prop.test(table(turnout$MAJORPTY, turnout$voted1998))
+propTestMajorParty1998 <- prop.test(MAJORPTY ~ voted1998, data = turnout)
 confint(propTestMajorParty1998)
 
 tTestAge1998 <- t.test(turnout$AGE[turnout$voted1998 == 1], turnout$AGE[turnout$voted1998 == 0])
 tTestAge1998$conf.int
 
-propTest1996_1998 <- prop.test(table(turnout$voted1996, turnout$voted1998))
+propTest1996_1998 <- prop.test(voted1996 ~ voted1998, data = turnout)
 confint(propTest1996_1998)
 
 
