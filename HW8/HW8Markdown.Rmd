@@ -1,0 +1,40 @@
+---
+title: "Homework 8"
+author: "Ahantya Sharma"
+date: "2025-04-10"
+output: pdf_document
+---
+
+### UT EID: as236366
+
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW4/HW4Markdown.Rmd>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(tidyverse)
+library(kableExtra)
+library(mosaic)
+creatine <- read.csv('creatinine.csv')
+```
+
+Problem 1 - regression warm up 
+
+```{r echo=FALSE, warning=FALSE}
+
+lm0 = lm(creatclear ~ age, data=creatine)
+
+predicted <- predict(lm0, newdata = data.frame(age = 55))
+
+# 113.723
+# a. 
+
+#b. is -1.085
+
+
+fourtyPredict <- predict(lm0, newdata = data.frame(age = 40)) # predicted to be 123, but 140 HEALTHIER
+sixtyPredict <- predict(lm0, newdata = data.frame(age = 60)) # predicted to be 110.62 but 112
+```
+
