@@ -7,7 +7,7 @@ output: pdf_document
 
 ### UT EID: as236366
 
-### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW4/HW4Markdown.Rmd>
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW8/HW8Markdown.Rmd>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
@@ -20,21 +20,33 @@ library(mosaic)
 creatine <- read.csv('creatinine.csv')
 ```
 
-Problem 1 - regression warm up 
+# Problem 1 - regression warm up 
+
+## A.
 
 ```{r echo=FALSE, warning=FALSE}
 
 lm0 = lm(creatclear ~ age, data=creatine)
+
 
 predicted <- predict(lm0, newdata = data.frame(age = 55))
 
 # 113.723
 # a. 
 
-#b. is -1.085
+#b. is -0.6198
 
 
 fourtyPredict <- predict(lm0, newdata = data.frame(age = 40)) # predicted to be 123, but 140 HEALTHIER
 sixtyPredict <- predict(lm0, newdata = data.frame(age = 60)) # predicted to be 110.62 but 112
 ```
 
+The creatinine clearance rate we should expect for a 55-year-old is approximately `r round(predicted, 4)`. This was done by finding the linear model of the relationship between a patient's age (in years) and a patient's creatine clearance rate (in mL/minute). Then we used that formula with the intercept as 147.8129 and the slope as -0.6198 and plugged in x (the age) as 55, to find the predicted creatinine clearance rate.
+
+## B. 
+
+The creatinine clearance rate changes with age by -0.6198 mL/minutes per year. This is found by the slope of our linear model (formally named as the age coefficient in the linear model).
+
+## C. 
+
+The creatinine clearance rate is higher (higher) for a 40-year-old with a rate of 135 compared to a 60-year-old with a rate of 112. This is because 
