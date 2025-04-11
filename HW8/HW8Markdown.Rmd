@@ -49,4 +49,4 @@ The creatinine clearance rate changes with age by -0.6198 mL/minutes per year. T
 
 ## C. 
 
-The creatinine clearance rate is higher (higher) for a 40-year-old with a rate of 135 compared to a 60-year-old with a rate of 112. This is because 
+The creatinine clearance rate is higher (higher) for a 40-year-old with a rate of 135 compared to a 60-year-old with a rate of 112. This is because through the linear model equation (147.8219 - 0.168x), a 60-year-old is expected to have a creatinine clearance rate of `r round(sixtyPredict, 4)` while a 40-year-old is expected to have a creatinine clearance rate of `r round(fourtyPredict, 4)`. Since the difference between the 40-year-old's creatinine clearance rate of 135 to its predicted value is higher compared to the difference between the 60-year-old's creatinine clearance rate of 112 to its predicted value, this means that the 40-year-old's creatinine clearance rate is higher and healthier. 
