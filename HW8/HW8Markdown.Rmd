@@ -18,6 +18,8 @@ library(tidyverse)
 library(kableExtra)
 library(mosaic)
 creatine <- read.csv('creatinine.csv')
+covid <- read.csv("covid.csv")
+milk <- read.csv("milk.csv")
 ```
 
 # Problem 1 - regression warm up 
@@ -50,3 +52,126 @@ The creatinine clearance rate changes with age by -0.6198 mL/minutes per year. T
 ## C. 
 
 The creatinine clearance rate is higher (higher) for a 40-year-old with a rate of 135 compared to a 60-year-old with a rate of 112. This is because through the linear model equation (147.8219 - 0.168x), a 60-year-old is expected to have a creatinine clearance rate of `r round(sixtyPredict, 4)` while a 40-year-old is expected to have a creatinine clearance rate of `r round(fourtyPredict, 4)`. Since the difference between the 40-year-old's creatinine clearance rate of 135 to its predicted value is higher compared to the difference between the 60-year-old's creatinine clearance rate of 112 to its predicted value, this means that the 40-year-old's creatinine clearance rate is higher and healthier. 
+
+\newpage
+
+
+# Problem 2 - Modeling disease growth
+
+## A.
+
+```{r echo=FALSE}
+
+italy <- subset(covid, country == "Italy")
+
+doublingTime70 <- numeric(10000)
+
+bootItaly <- do(10000) * {
+  italyModel <- lm(log(deaths) ~ days_since_first_death, data = resample(italy))
+}
+
+bootItalyDoubling <- do(10000) * {
+  model <- lm(log(deaths) ~ days_since_first_death, data = resample(italy))
+  slope <- coef(model)[2]
+  data.frame(doubling = 70 / (slope * 100))
+}
+
+ciItaly <- confint(bootItaly, level = 0.95)
+
+kable(ciItaly[ciItaly$name == "days_since_first_death", ], caption = "95% Bootstrapped CI for Growth Rate (Italy)")
+
+
+
+kable(confint(bootItalyDoubling, level = 0.95), caption = "95% Bootstrapped CI for Doubling Time (Italy)")
+
+
+
+spain <- subset(covid, country == "Spain")
+
+
+bootSpain <- do(10000) * {
+  spainModel <- lm(log(deaths) ~ days_since_first_death, data = resample(spain))
+}
+
+```
+
+Through a 95% bootstrapped confidence interval, the estimated growth rate for Italy is about 0.183 with the interval range specifically being about (0.159, 0.209). 
+
+Through a 95% bootstrapped confidence interval, the estimated doubling time for Italy is about 3.8 with the interval range specifically being about (3.4, 4.4). 
+
+## B. 
+
+```{r echo=FALSE}
+
+bootSpainDoubling <- do(10000) * {
+  model <- lm(log(deaths) ~ days_since_first_death, data = resample(spain))
+  slope <- coef(model)[2] # gets the slope
+  data.frame(doubling = 70 / (slope * 100))
+}
+
+
+ciSpain <- confint(bootSpain, level = 0.95)
+
+kable(
+  ciSpain[ciSpain$name == "days_since_first_death", ],
+  caption = "95% Bootstrapped CI for Growth Rate (Spain)"
+)
+
+
+kable(
+  confint(bootSpainDoubling, level = 0.95),
+  caption = "95% Bootstrapped CI for Doubling Time (Spain)"
+)
+```
+
+Through a 95% bootstrapped confidence interval, the estimated growth rate for Spain is about 0.276 with the interval range specifically being about (0.236, 0.318). 
+
+Through a 95% bootstrapped confidence interval, the estimated doubling time for Spain is about 2.5 with the interval range specifically being about (2.2, 3.0). 
+
+## C. 
+
+```{r echo=FALSE}
+
+ggplot(covid, aes(x = days_since_first_death, y = deaths, color = country)) +
+  geom_line() +  # Line graph
+  labs(
+    title = "Reported Daily COVID-19 Deaths Over Time",
+    x = "Days Since First Death",
+    y = "Number of Daily Deaths",
+    color = "Country"
+  ) +
+  scale_color_manual(values = c("Italy" = "green", "Spain" = "yellow")) + 
+  theme_minimal() 
+
+```
+
+As the line graph shows, Spain's number of daily deaths increased at a faster slope than Italy's number of daily deaths since the first death (up to the point of around 26 days since the first death). 
+
+\newpage
+
+# Problem 3 - price elasticity of demand 
+
+```{r echo=FALSE}
+
+
+bootMilk <- do(10000) * {
+  milkModel <- lm(log(sales) ~ log(price), data = resample(milk))
+}
+
+ciMilk <- confint(bootMilk, level = 0.95)
+
+kable(
+  ciMilk[ciMilk$name == "log.price.", ],
+  caption = "95% Bootstrapped CI for Price Elasticity of Demand (Milk)"
+)
+
+
+# -1.77 to -1.45
+
+
+
+```
+
+I estimated the price elasticity of demand by fitting a log-log linear model of sales on price, where the coefficient of log(price) gives the elasticity. Through a bootstrapped 95% confidence interval that finds the linear model, the estimated elasticity is about -1.619, with the interval range specifically being about (-1.770, -1.456). This means that a 1% increase in price leads to approximately a 1.619 decrease in the quantity demanded. 
+
+
