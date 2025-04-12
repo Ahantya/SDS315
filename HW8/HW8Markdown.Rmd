@@ -58,7 +58,7 @@ The creatinine clearance rate is higher (higher) for a 40-year-old with a rate o
 
 # Problem 2 - Modeling disease growth
 
-## A.
+## 1.
 
 ```{r echo=FALSE}
 
@@ -99,7 +99,7 @@ Through a 95% bootstrapped confidence interval, the estimated growth rate for It
 
 Through a 95% bootstrapped confidence interval, the estimated doubling time for Italy is about 3.8 with the interval range specifically being about (3.4, 4.4). 
 
-## B. 
+## 2. 
 
 ```{r echo=FALSE}
 
@@ -128,7 +128,7 @@ Through a 95% bootstrapped confidence interval, the estimated growth rate for Sp
 
 Through a 95% bootstrapped confidence interval, the estimated doubling time for Spain is about 2.5 with the interval range specifically being about (2.2, 3.0). 
 
-## C. 
+## 3. 
 
 ```{r echo=FALSE}
 
@@ -172,6 +172,6 @@ kable(
 
 ```
 
-I estimated the price elasticity of demand by fitting a log-log linear model of sales on price, where the coefficient of log(price) gives the elasticity. Through a bootstrapped 95% confidence interval that finds the linear model, the estimated elasticity is about -1.619, with the interval range specifically being about (-1.770, -1.456). This means that a 1% increase in price leads to approximately a 1.619 decrease in the quantity demanded. 
+I estimated the price elasticity of demand by fitting a log-log linear model of sales on price, where the coefficient of log(price) gives the elasticity. Through a bootstrapped 95% confidence interval that finds the linear model, the estimated price elasticity of demand for milk is about -1.619, with the interval range specifically being about (-1.770, -1.456). This means that a 1% increase in price leads to approximately a 1.619 decrease in the quantity demanded. 
 
 
