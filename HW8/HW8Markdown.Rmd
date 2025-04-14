@@ -140,7 +140,7 @@ ggplot(covid, aes(x = days_since_first_death, y = deaths, color = country)) +
     y = "Number of Daily Deaths",
     color = "Country"
   ) +
-  scale_color_manual(values = c("Italy" = "green", "Spain" = "yellow")) + 
+  scale_color_manual(values = c("Italy" = "red", "Spain" = "blue")) + 
   theme_minimal() 
 
 ```
