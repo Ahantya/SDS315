@@ -176,3 +176,15 @@ standardize_parameters(incomeLM)[standardize_parameters(incomeLM)$Parameter == "
 
 A one-standard deviation increase in the income of a ZIP code seems to be associated with
 a -0.03 standard-deviation change in the price that consumers in that ZIP code expect to pay for the same product. 
+
+# Problem 3 - redlining
+
+A. ZIP codes with a higher percentage of minority residents tend to have more FAIR policies per 100 housing units
+
+### TRUE: We can see the Figure A1 has a R-Squared value of 0.5164, which shows a positive, linear trend of FAIR Policies per 100 Housing Units increasing when the percentage of minority residents increase. 
+
+B. The evidence suggests an interaction effect between minority percentage and the age of the housing stock in the way that these two variables are related to the number of FAIR policies in a ZIP code.
+
+### UNDECIDABLE: Figure B1 has a R-Square value of 0.0609, showing that the percentage of minority students almost has no correlation to the housing age. However, correlation doesn't imply interaction and either can be true without the other. So this question is undecidable.
+
+C. 
