@@ -21,6 +21,7 @@ library(mosaic)
 library(dplyr)
 solder = read.csv("solder.csv")
 grocery = read.csv("groceries.csv")
+redlining = read.csv("redlining.csv")
 ```
 
 # Problem 1 - Manufacturing flaws in circuit boards
