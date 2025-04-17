@@ -28,7 +28,7 @@ redlining = read.csv("redlining.csv")
 
 ## Part A. 
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height = 3, fig.width = 4}
 
 ggplot(solder, aes(x = Opening, y = skips)) +
   geom_boxplot() +
@@ -42,7 +42,7 @@ ggplot(solder, aes(x = Opening, y = skips)) +
 
 This boxplot shows that as the opening size is smaller, the number of skips is higher on average. 
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height = 3, fig.width = 4}
 
 ggplot(solder, aes(x = Solder, y = skips)) +
   geom_boxplot() +
@@ -99,7 +99,7 @@ This bar graph shows the average price of an item in each store, specifically po
 
 ## Part B. 
 
-```{r echo=FALSE, fig.height=12, fig.width=8}
+```{r echo=FALSE, fig.height=9, fig.width=8}
 
 productDistinct <- distinct(grocery, Product, Store) # finds unique amount of products 
 
@@ -181,16 +181,20 @@ a -0.03 standard-deviation change in the price that consumers in that ZIP code e
 
 A. ZIP codes with a higher percentage of minority residents tend to have more FAIR policies per 100 housing units
 
-### TRUE: We can see the Figure A1 has a R-Squared value of 0.5164, which shows a positive, linear trend of FAIR Policies per 100 Housing Units increasing when the percentage of minority residents increase. 
+### TRUE: With FigureA1, we can see the model_A has a R-Squared value of 0.5164, which shows a positive, linear trend of FAIR Policies per 100 Housing Units increasing when the percentage of minority residents increase. We also see that the 95% confidence interval for the percentage of minorities is (0.009, 0.018), which doesn't contain 0 and is only positive, so the statement is also statistically signficant while being true. 
 
 B. The evidence suggests an interaction effect between minority percentage and the age of the housing stock in the way that these two variables are related to the number of FAIR policies in a ZIP code.
 
-### UNDECIDABLE: Figure B1 has a R-Square value of 0.0609, showing that the percentage of minority students almost has no correlation to the housing age. However, correlation doesn't imply interaction and either can be true without the other. So this question is undecidable.
+### UNDECIDABLE: With Figure B1, model_B has a R-Square value of 0.0609, showing that the percentage of minority students almost has no correlation to the housing age. However, correlation doesn't imply interaction and either can be true without the other. So this question is undecidable.
 
 C. The relationship between minority percentage and number of FAIR policies per 100 housing units is stronger in high-fire-risk ZIP codes than in low-fire-risk ZIP codes
 
-### TRUE: The regression model model_C shows that the interaction between minority percentage and number of FAIR policies per 100 housing units is -0.001 weaker in low-fire-risk ZIP codes. This means that the the relationship between minority percentage and number of FAIR policies per 100 housing units is stronger in high-fire-risk ZIP codes than in low-fire-risk ZIP codes but by a small value. 
+### FALSE: The regression model model_C shows that the interaction between minority percentage and number of FAIR policies per 100 housing units is -0.001 weaker in low-fire-risk ZIP codes, however, the confidence interval is (-0.012, 0.01), which contains zero. This means that the there is no signficiant relationship between minority percentage and number of FAIR policies per 100 housing units in high-fire-risk ZIP codes compared to low-fire-risk ZIP codes, so the statement is false. 
 
 D. Even without controlling for any other variables, income “explains away” all the association between minority percentage and FAIR policy uptake. 
 
-### FALSE: In model_D2, when we 
+### FALSE: We can see that the coefficient for minority percentage in model_A where the relationship over FAIR policies per 100 housing units vs. minority percentage was 0.014. Now when they also controlled for income in model_D2, the minority percentage coefficient still remained at 0.01, which is very similar to model_A. Since the coefficients are so similar when income is and isn't controlled for, this means that income isn't a factor that simply "explains away" all the association between minority percentage and FAIR policy uptake. Note: both the 95% CI for each model's (A and D2) minority coefficient didn't contain zero, so we can explain this statement by comparing their coefficients directly. 
+
+E. Minority percentage and number of FAIR policies are still associated at the ZIP code level, even after controlling for income, fire risk, and housing age.
+
+### TRUE: Even after controlling for income, fire risk, and housing age, we can still see that the coefficient for minority percentage is 0.008 with the 95% confidence interval being (0.003, 0.014), which means that it still has an association (no matter it being small) with the number of FAIR policies at the ZIP code level. 
