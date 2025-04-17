@@ -187,4 +187,10 @@ B. The evidence suggests an interaction effect between minority percentage and t
 
 ### UNDECIDABLE: Figure B1 has a R-Square value of 0.0609, showing that the percentage of minority students almost has no correlation to the housing age. However, correlation doesn't imply interaction and either can be true without the other. So this question is undecidable.
 
-C. 
+C. The relationship between minority percentage and number of FAIR policies per 100 housing units is stronger in high-fire-risk ZIP codes than in low-fire-risk ZIP codes
+
+### TRUE: The regression model model_C shows that the interaction between minority percentage and number of FAIR policies per 100 housing units is -0.001 weaker in low-fire-risk ZIP codes. This means that the the relationship between minority percentage and number of FAIR policies per 100 housing units is stronger in high-fire-risk ZIP codes than in low-fire-risk ZIP codes but by a small value. 
+
+D. Even without controlling for any other variables, income “explains away” all the association between minority percentage and FAIR policy uptake. 
+
+### FALSE: In model_D2, when we 
