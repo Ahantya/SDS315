@@ -1,0 +1,98 @@
+---
+title: "Homework 9"
+author: "Ahantya Sharma"
+date: "2025-04-15"
+output: pdf_document
+---
+
+### UT EID: as236366
+
+### Github Link: <https://github.com/Ahantya/SDS315/blob/main/HW9/HW9Markdown.Rmd>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(tidyverse)
+library(kableExtra)
+library(mosaic)
+library(dplyr)
+solder = read.csv("solder.csv")
+grocery = read.csv("groceries.csv")
+```
+
+# Problem 1 - Manufacturing flaws in circuit boards
+
+## Part A. 
+
+```{r echo=FALSE}
+
+ggplot(solder, aes(x = Opening, y = skips)) +
+  geom_boxplot() +
+  labs(title = "Number of Skips by Solder Gun Opening Size",
+       x = "Opening Size",
+       y = "Number of Skips") +
+  theme_minimal()
+
+
+```
+
+This boxplot shows that as the opening size is smaller, the number of skips is higher on average. 
+
+```{r echo=FALSE}
+
+ggplot(solder, aes(x = Solder, y = skips)) +
+  geom_boxplot() +
+  labs(title = "Number of Skips by Solder Thickness",
+       x = "Solder Thickness",
+       y = "Number of Skips") +
+  theme_minimal()
+
+
+```
+
+This boxplot shows that a thinner solder has a larger number of skips on average than the thicker solder. 
+
+## Part B.
+
+```{r echo=FALSE}
+
+
+skipsInteraction <- do(10000) * lm(skips ~ Opening + Solder + Opening:Solder, data = resample(solder))
+
+confint(skipsInteraction, level = 0.95)
+
+```
+
+## Part C.
+
+The baseline number of skips for a large opening and thick solder is about 0.3933, with an increase of 2.4067 for a medium opening and 5.1267 for a small opening. When the solder is thin, skips increase by 2.28 with a large opening, decrease by 0.74 with a medium opening, and increase by 9.6533 with a small opening, relative to the baseline.
+
+## Part D.
+According to the regression model, I would recommend a combination of a thick solder with a large opening to AT&T because it's reported to have the least amount of skips. 
+
+
+# Problem 2 - Grocery store prices
+
+## Part A. 
+
+```{r echo=FALSE}
+
+avgPriceByStore <- group_by(grocery, Store)
+
+avgPriceByStore <- summarize(avgPriceByStore, avgPrice = mean(Price))
+
+ggplot(avgPriceByStore, aes(x = Store, y = avgPrice)) +
+  geom_col(fill = "orange") +
+  coord_flip() +
+  labs(
+    title = "Average Product Price by Store",
+    x = "Store",
+    y = "Average Price (USD)"
+  )
+
+```
+This bar graph shows the average price of an item in each store, specifically pointing that Whole Foods being the most expensive in terms of average price and Fiesta being the cheapest in terms of average price. 
+
+## Part B. 
