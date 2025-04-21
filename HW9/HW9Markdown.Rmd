@@ -72,7 +72,24 @@ get_regression_table(skipsInteraction, conf.level = 0.95, digits=4)
 
 ## Part C.
 
-The baseline number of skips for a large opening and thick solder is about 0.3933, with an increase of 2.4067 for a medium opening and 5.1267 for a small opening. When the solder is thin, skips increase by 2.28 with a large opening, decrease by 0.74 with a medium opening, and increase by 9.6533 with a small opening, relative to the baseline.
+Intercept (0.3933):
+This is the estimated number of skips when the opening is large and the solder is thick (the baseline group). On average, boards with this combination have about 0.3933 skips.
+
+Opening: M (2.4067):
+Compared to large openings, using a medium opening increases the number of skips by about 2.4067, on average, when the solder is thick.
+
+Opening: S (5.1267):
+Compared to large openings, using a small opening increases the number of skips by about 5.1267, on average, when the solder is thick.
+
+Solder: Thin (2.2800):
+When using a thin solder instead of a thick one, the number of skips increases by about 2.28, on average, when the opening is large.
+
+Opening: M × Solder: Thin (–0.7400):
+The interaction term indicates that the combined effect of using a medium opening with thin solder leads to 0.74 fewer skips than we would expect from the skips in a medium opening and thin solder alone.
+
+Opening: S × Solder: Thin (9.6533):
+The interaction term shows that using a small opening with thin solder results in 9.65 more skips than we would expect from the effects of small opening and thin solder.
+
 
 ## Part D.
 According to the regression model, I would recommend a combination of a thick solder with a large opening to AT&T because it's reported to have the least amount of skips. 
@@ -117,7 +134,9 @@ ggplot(productCounts, aes(x = Product, y = numStores)) +
     y = "Number of Stores") 
 
 ```
-This bar graph shows the item availability by the number of stores, so the most common available items include Carton of eggs, Horizon 2% Milk Cartons, and Iodized Salt while the least common available items include Frosted Flakes 1lb, El Milagros Tortilla Chips, Cinnamon Toast Crunch 1lb, and Lucky Charms 1lb. 
+This bar graph shows the item availability by the number of stores, so the most common available items include Carton of eggs, Horizon 2% Milk Cartons, and Iodized Salt while the least common available items include Frosted Flakes 1lb, El Milagros Tortilla Chips, Cinnamon Toast Crunch 1lb, and Lucky Charms 1lb.
+
+\newpage
 
 ## Part C. 
 
@@ -140,7 +159,8 @@ coef(productStoreLM, level=0.95)
 
 ```
 
-The two stores seem to charge the lowest prices when comparing the same product are Kroger Fresh Fare and Walmart. The two stores that seem to charge the highest prices when comparing the same product are Wheatsville Food Co-Op and Whole Foods.  
+The two stores that seem to charge the lowest prices when comparing the same product are Kroger Fresh Fare (at about \$0.90 less than the baseline) and Walmart (at about \$0.99 less than the baseline). The two stores that seem to charge the highest prices when comparing the same product are Wheatsville Food Co-Op (at about \$0.29 more than the baseline) and Whole Foods (at about \$0.36 more than the baseline). So, the store that charges the lowest prices when comparing the same product is Walmart, and the store that charges the highest prices when comparing the same product is Whole Foods.
+
 
 ## Part E. 
 
@@ -188,7 +208,7 @@ B. The evidence suggests an interaction effect between minority percentage and t
 
 C. The relationship between minority percentage and number of FAIR policies per 100 housing units is stronger in high-fire-risk ZIP codes than in low-fire-risk ZIP codes
 
-### UNDECIDABLE: The regression model model_C shows that the interaction between minority percentage and number of FAIR policies per 100 housing units is -0.001 weaker in low-fire-risk ZIP codes, however, the confidence interval is (-0.012, 0.01), which contains zero. This means that the there is no signficiant relationship between minority percentage and number of FAIR policies per 100 housing units in high-fire-risk ZIP codes compared to low-fire-risk ZIP codes, so the statement cannot be proved with the information we have. 
+### FALSE: The regression model model_C shows that the interaction between minority percentage and number of FAIR policies per 100 housing units is -0.001 weaker in low-fire-risk ZIP codes, however, the confidence interval is (-0.012, 0.01), which contains zero. This means that the difference in the relationship between minority percentage and number of FAIR policies per 100 housing units across fire-risk levels is not statistically significant. So, we cannot conclude that the relationship is stronger in high-fire-risk ZIP codes, and the statement is false. Also, in Figure C1 (that compares the FAIR policies per 100 housing units against the Minority Percentage by Fire Risk Group), you can see that the slopes in the High Fire Risk and the Low Fire Risk Zip Codes seem parallel, which means that the relationship between minority percentage and number of FAIR policies per 100 housing units most likely doesn't depend on whether the fire risk is high or low, so this statement is false. 
 
 
 D. Even without controlling for any other variables, income “explains away” all the association between minority percentage and FAIR policy uptake. 
