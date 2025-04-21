@@ -184,7 +184,7 @@ coef(incomeLM)
 ```
 
 
-The sign of the Income10K coefficient, which is negative, so this means that when the average income increases, the price of items decreases. By the linear model trend, this means that poorer ZIP codes will usually be paying more for the same product, on average.
+The sign of the Income10K coefficient is negative, so this means that when the average income increases, the price of items decreases. By the linear model trend, this means that poorer ZIP codes will usually be paying more for the same product, on average.
 
 ```{r echo=FALSE}
 
