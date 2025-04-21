@@ -168,7 +168,7 @@ The two stores that seem to charge the lowest prices when comparing the same pro
 confint(productStoreLM)
 ```
 
-Knowing that H-E-B's coefficient is approximately -0.646 and Central Market's coefficient is approximately -0.573, we can see that Central Market charges slightly more than H-E-B on average—about 7 cents more per item but the average price difference (between Central Market and H-E-B) is very small (about 7 cents). We can also note that there is a huge overlap in both confidence intervals. So, in terms of context, when you compare their coefficients to something like Whole Foods' coefficient, which is almost a dollar more expensive than an item on average than H-E-B and Central Market, you can comparatively conclude that Central Market charges a similar amount to H-E-B for the same product.
+Knowing that H-E-B's coefficient is approximately -0.646 and Central Market's coefficient is approximately -0.573, we can see that Central Market charges slightly more than H-E-B on average—about 7 cents more per item but the average price difference (between Central Market and H-E-B) is very small (about 7 cents). We can also note that there is a huge overlap in both confidence intervals. So, in terms of context, when you compare their coefficients to something like Whole Foods' coefficient, which is almost a dollar more expensive than an item on average t H-E-B and Central Market, you can comparatively conclude that Central Market charges a similar amount to H-E-B for the same product.
 
 ## Part F. 
 
